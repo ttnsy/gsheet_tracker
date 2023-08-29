@@ -1,10 +1,11 @@
 box::use(
   reactable[...],
+  dplyr[`%>%`, select],
   shiny[...],
 )
 
 box::use(
-  
+  app/logic/utils_tracker[clean_tracker_cols]
 )
 
 #' @export
@@ -16,7 +17,7 @@ ui <- function(id) {
         ns("add_pencairan"),
         "Tambah bukti pencairan",
         class = "btn-add",
-        icon = icon('plus'),
+        icon = icon("plus"),
         width = "40%"
     ),
     reactableOutput(ns("tbl_pencairan"))
@@ -30,7 +31,10 @@ server <- function(id, data) {
 
     output$tbl_pencairan <- renderReactable({
         req(data())
-        reactable(data())
+        data <- clean_tracker_cols(data()) %>%
+            select(c("Nama", "Sistem Pembayaran", "Blok/Kavling", everything()))
+
+        reactable(data)
     })
 
     observeEvent(input$add_pencairan, {
@@ -61,10 +65,10 @@ server <- function(id, data) {
                     )
                 ),
                 footer = list(
-                    modalButton('Cancel'),
+                    modalButton("Cancel"),
                     actionButton(
-                        ns('submit'),
-                        'Submit',
+                        ns("submit"),
+                        "Submit",
                         class = "btn btn-primary",
                         style = "color: white"
                     )

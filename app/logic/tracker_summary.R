@@ -3,6 +3,10 @@ box::use(
     stringr[str_to_title]
 )
 
+box::use(
+    app/logic/utils_tracker[clean_tracker_cols]
+)
+
 #' @export 
 get_summary  <- function(pencairan, konstruksi, kontraktor) {
     done_termin  <- konstruksi %>%
@@ -12,19 +16,18 @@ get_summary  <- function(pencairan, konstruksi, kontraktor) {
         ) %>%
         ungroup()
 
-     pencairan %>%
+     dat  <- pencairan %>%
         group_by(nama, sistem_pembayaran, blok_id)  %>%
         summarise(
             jml_pencairan = n()
         ) %>%
         ungroup()  %>%
         left_join(kontraktor) %>%
-        select(-c("blok", "nomor_kavling")) %>%
         mutate(
             termin_avail = ifelse(nama_kontraktor == "Asep", jml_pencairan * 3, jml_pencairan * 1),
             termin_avail = pmin(termin_avail, 5)
         ) %>%
-        left_join(done_termin) %>%
-        rename("Blok/Kavling" = "blok_id")  %>%
-        rename_with(~str_to_title(gsub("_", " ", .)))
+        left_join(done_termin)
+
+    clean_tracker_cols(dat)
 }

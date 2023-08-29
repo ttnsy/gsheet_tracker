@@ -34,36 +34,36 @@ server <- function(id, data) {
     })
 
     observeEvent(col_state(), {
-        to_edit  <- data[col_state(), ]
+      to_edit  <- data[col_state(), ]
 
-        showModal(
-            modalDialog(
-                div(
-                    class = "modal-edit",
-                    selectInput(
-                        ns("status"),
-                        "Status",
-                        choices = c("Cancel", "Process", "Reject"),
-                        selected = to_edit$Status
-                    )
-                ),
-                footer = list(
-                    modalButton('Cancel'),
-                    actionButton(
-                        ns('submit'),
-                        'Submit',
-                        class = "btn btn-primary",
-                        style = "color: white"
-                    )
-                )
+      showModal(
+        modalDialog(
+          div(
+            class = "modal-edit",
+            selectInput(
+                ns("status"),
+                "Status",
+                choices = c("Cancel", "Process", "Reject"),
+                selected = to_edit$Status
             )
+          ),
+          footer = list(
+            modalButton("Cancel"),
+            actionButton(
+                ns("submit"),
+                "Submit",
+                class = "btn btn-primary",
+                style = "color: white"
+            )
+          )
         )
+      )
     })
 
     edit_dat <- reactive({
         req(input$status)
         hold  <- data[col_state(), ]
-        if(input$status != hold$Status){
+        if (input$status != hold$Status) {
             out <- hold %>%
             mutate(Status = input$Status)
         } else {

@@ -1,5 +1,18 @@
 box::use(
-  shiny[div,req, reactive, NS, h3, tags, tagList, moduleServer, selectInput, uiOutput, renderUI],
+  shiny[
+    div,
+    span,
+    req,
+    reactive,
+    NS,
+    h3,
+    tags,
+    tagList,
+    moduleServer,
+    selectInput,
+    uiOutput,
+    renderUI
+  ],
   reactable[...],
   glue[glue],
   dplyr[...],
@@ -8,7 +21,7 @@ box::use(
 )
 
 box::use(
-    app/logic/read_tracker[...],
+    app/logic/utils_tracker[...],
     app/logic/tracker_summary[...],
     app/view/tracker_pencairan,
     app/view/tracker_konstruksi
@@ -20,14 +33,14 @@ ui <- function(id) {
   div(
     class = "container-tracker",
     div(
-        class = "tracker-summary",
-        reactableOutput(ns("summary")),
+      class = "tracker-summary",
+      reactableOutput(ns("summary")),
     ),
     div(
-        class = "tracker-kavling",
-        uiOutput(ns("input_kavling")),
-        tracker_pencairan$ui(ns("pencairan")),
-        tracker_konstruksi$ui(ns("konstruksi"))
+      class = "tracker-kavling",
+      uiOutput(ns("kavling_ui")),
+      tracker_pencairan$ui(ns("pencairan")),
+      tracker_konstruksi$ui(ns("konstruksi"))
     )
   )
 }
@@ -37,19 +50,20 @@ server <- function(id, sheet_id, data) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    pencairan  <- read_tracker(sheet_id, "pencairan", clean_names = T)
-    konstruksi  <- read_tracker(sheet_id, "konstruksi", clean_names = T)
-    kontraktor  <- read_tracker(sheet_id, "kontraktor", clean_names = T) 
+    pencairan  <- read_tracker(sheet_id, "pencairan", clean_names = TRUE)
+    konstruksi  <- read_tracker(sheet_id, "konstruksi", clean_names = TRUE)
+    kontraktor  <- read_tracker(sheet_id, "kontraktor", clean_names = TRUE)
+
+    summary_data  <- get_summary(pencairan, konstruksi, kontraktor)
 
     output$summary  <- renderReactable({
-      summary_data  <- get_summary(pencairan, konstruksi, kontraktor)
       reactable(
         summary_data,
         searchable = TRUE
       )
     })
 
-    output$input_kavling  <- renderUI({
+    output$kavling_ui  <- renderUI({
         selectInput(
         ns("kavling"),
         "Pilih Blok/Kavling:",
