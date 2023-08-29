@@ -1,10 +1,13 @@
 box::use(
   shiny[navbarPage, tabPanel, moduleServer, NS, renderText, tags, textOutput],
-  googlesheets4[gs4_deauth, read_sheet]
+  googlesheets4[...],
+  glue[glue],
+  dplyr[...]
 )
 
 box::use(
-  app/view/tbl_spr
+  app/view/tbl_spr,
+  app/view/tracker
 )
 
 #' @export
@@ -18,7 +21,8 @@ ui <- function(id) {
       tbl_spr$ui(ns("tbl_spr"))
     ),
     tabPanel(
-      "Tracker"
+      "Tracker",
+      tracker$ui(ns("tracker"))
     ),
     tabPanel(
       "Kontraktor"
@@ -30,9 +34,12 @@ ui <- function(id) {
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
     gs4_deauth()
-    spr  <- read_sheet("https://docs.google.com/spreadsheets/d/1iCKfGD1QAmdBChqlfp5-WnN8rms4hmAPmdjUXLe859w/edit?usp=sharing")
+    sheet_id  <- as_sheets_id("https://docs.google.com/spreadsheets/d/1iCKfGD1QAmdBChqlfp5-WnN8rms4hmAPmdjUXLe859w/edit?usp=sharing")
+    spr  <- read_sheet(sheet_id, "spr")
+    spr  <-  spr %>%
+     mutate(blok_id = glue("{Blok}/{`Nomor Kavling`}"))
 
     tbl_spr$server("tbl_spr", data = spr)
-
+    tracker$server("tracker", sheet_id = sheet_id, data = filter(spr, Status == "Process"))
   })
 }

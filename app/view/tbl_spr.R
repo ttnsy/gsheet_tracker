@@ -1,7 +1,9 @@
 box::use(
-  shiny[NS, h3, tagList, moduleServer, selectInput],
-  reactable[colDef, reactable, reactableOutput, renderReactable],
-  dplyr[...]
+  shiny[...],
+  reactable[...],
+  dplyr[...],
+  glue[glue],
+  htmlwidgets[JS]
 )
 
 js <- "
@@ -15,32 +17,106 @@ $(document).on('shiny:value', function(e) {
 #' @export
 ui <- function(id) {
   ns <- NS(id)
-  reactableOutput(ns("spr"))
+  div(
+    class = "container-spr",
+    actionButton(
+      ns("add"),
+      "Add",
+      class = "btn-success",
+      style = "color: #fff;",
+      icon = icon('plus')
+    ),
+    reactableOutput(ns("spr"))
+  )
 }
 
 #' @export
 server <- function(id, data) {
   moduleServer(id, function(input, output, session) {
-    output$spr <- renderReactable({
-      for (i in 1:length(data$Status)) {
-        data$Status[i] <- c(
-          as.character(
-            selectInput(
-              inputId = "status",
-              label = NULL,
-              choices = c("Cancel", "Reject", "Approved"),
-              selected = data$Status[i]
+    ns  <- session$ns
+    col_state <- reactive({
+        getReactableState("spr", "selected")
+    })
+
+    observeEvent(col_state(), {
+        to_edit  <- data[col_state(), ]
+
+        showModal(
+            modalDialog(
+                div(
+                    class = "modal-edit",
+                    selectInput(
+                        ns("status"),
+                        "Status",
+                        choices = c("Cancel", "Process", "Reject"),
+                        selected = to_edit$Status
+                    )
+                ),
+                footer = list(
+                    modalButton('Cancel'),
+                    actionButton(
+                        ns('submit'),
+                        'Submit',
+                        class = "btn btn-primary",
+                        style = "color: white"
+                    )
+                )
             )
-          )
         )
-      }
+    })
+
+    edit_dat <- reactive({
+        req(input$status)
+        hold  <- data[col_state(), ]
+        if(input$status != hold$Status){
+            out <- hold %>%
+            mutate(Status = input$Status)
+        } else {
+            out  <- hold
+        }
+        return(
+            list(
+                data_old  = hold,
+                data_new = out
+            )
+        )
+    })
+
+    output$spr <- renderReactable({
+      data <- data %>%
+        select(-c("blok_id"))  %>%
+        mutate(
+            `Bukti Booking Fee` = as.character(
+                a("Gdrive Link", href = `Bukti Booking Fee`, target = "_blank")
+            )
+        )
 
       reactable(
         data,
+        wrap = TRUE,
+        selection = "single",
+        onClick = "select",
+        rowStyle = JS("function(rowInfo) {
+            if (rowInfo && rowInfo.selected) {
+            return { backgroundColor: '#eee', boxShadow: 'inset 2px 0 0 0 #ffa62d' }
+            }
+        }"),
         columns = list(
           Status = colDef(
-            html = TRUE,
+            style = function(value) {
+                if (value == "Process") {
+                    color <- "#008000"
+                } else if (value == "Reject") {
+                    color  <- "#e00000"
+                } else {
+                    color  <- "#777"
+                }
+                list(color = color, fontWeight = "bold")
+            },
             align = "center"
+          ),
+          `Bukti Booking Fee` = colDef(
+            html = TRUE
           )
         )
       )
