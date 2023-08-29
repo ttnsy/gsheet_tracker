@@ -6,6 +6,7 @@ box::use(
 )
 
 box::use(
+  app/logic/read_tracker[...],
   app/view/tbl_spr,
   app/view/tracker
 )
@@ -33,11 +34,11 @@ ui <- function(id) {
 #' @export
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
-    gs4_deauth()
-    sheet_id  <- as_sheets_id("https://docs.google.com/spreadsheets/d/1iCKfGD1QAmdBChqlfp5-WnN8rms4hmAPmdjUXLe859w/edit?usp=sharing")
-    spr  <- read_sheet(sheet_id, "spr")
-    spr  <-  spr %>%
-     mutate(blok_id = glue("{Blok}/{`Nomor Kavling`}"))
+    gs4_auth(cache = ".secrets", email = "tanesya.t@gmail.com")
+    url  <- "https://docs.google.com/spreadsheets/d/1iCKfGD1QAmdBChqlfp5-WnN8rms4hmAPmdjUXLe859w/edit?usp=sharing" # nolint: line_length_linter.
+    sheet_id  <- as_sheets_id(url)
+
+    spr <- read_tracker(sheet_id, sheet_name = "spr")
 
     tbl_spr$server("tbl_spr", data = spr)
     tracker$server("tracker", sheet_id = sheet_id, data = filter(spr, Status == "Process"))

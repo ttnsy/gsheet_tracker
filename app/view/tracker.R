@@ -8,6 +8,7 @@ box::use(
 )
 
 box::use(
+    app/logic/read_tracker[...],
     app/logic/tracker_summary[...],
     app/view/tracker_pencairan,
     app/view/tracker_konstruksi
@@ -36,9 +37,9 @@ server <- function(id, sheet_id, data) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    pencairan  <- read_sheet(sheet_id, "pencairan")
-    konstruksi  <- read_sheet(sheet_id, "konstruksi")
-    kontraktor  <- read_sheet(sheet_id, "kontraktor") 
+    pencairan  <- read_tracker(sheet_id, "pencairan", clean_names = T)
+    konstruksi  <- read_tracker(sheet_id, "konstruksi", clean_names = T)
+    kontraktor  <- read_tracker(sheet_id, "kontraktor", clean_names = T) 
 
     output$summary  <- renderReactable({
       summary_data  <- get_summary(pencairan, konstruksi, kontraktor)
@@ -58,20 +59,14 @@ server <- function(id, sheet_id, data) {
 
     data_pencairan  <- reactive({
         req(input$kavling)
-        blok  <- strsplit(input$kavling, "[/]")[[1]][1]
-        kavling  <- strsplit(input$kavling, "[/]")[[1]][2]
-
-        clean_names(pencairan) %>%
-            filter(blok == blok & nomor_kavling == kavling)
+        pencairan %>%
+          filter(blok_id == input$kavling)
     })
 
     data_konstruksi  <- reactive({
         req(input$kavling)
-        blok  <- strsplit(input$kavling, "[/]")[[1]][1]
-        kavling  <- strsplit(input$kavling, "[/]")[[1]][2]
-
-        clean_names(konstruksi)  %>%
-            filter(blok == blok & nomor_kavling == kavling)
+        konstruksi  %>%
+          filter(blok_id == input$kavling)
     })
 
     tracker_pencairan$server("pencairan", data_pencairan)
