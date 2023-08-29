@@ -21,12 +21,6 @@ ui <- function(id) {
   div(
     class = "container-spr",
     uiOutput(ns("spr_filter")),
-    actionButton(
-      ns("add"),
-      "Add",
-      class = "btn-add",
-      icon = icon('plus')
-    ),
     reactableOutput(ns("spr"))
   )
 }
