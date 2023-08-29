@@ -1,6 +1,7 @@
 box::use(
   shiny[...],
   reactable[...],
+  crosstalk[...],
   dplyr[...],
   glue[glue],
   htmlwidgets[JS]
@@ -19,11 +20,11 @@ ui <- function(id) {
   ns <- NS(id)
   div(
     class = "container-spr",
+    uiOutput(ns("spr_filter")),
     actionButton(
       ns("add"),
       "Add",
-      class = "btn-success",
-      style = "color: #fff;",
+      class = "btn-add",
       icon = icon('plus')
     ),
     reactableOutput(ns("spr"))
@@ -82,8 +83,7 @@ server <- function(id, data) {
         )
     })
 
-    output$spr <- renderReactable({
-      data <- data %>%
+    data <- data %>%
         select(-c("blok_id"))  %>%
         mutate(
             `Bukti Booking Fee` = as.character(
@@ -91,9 +91,23 @@ server <- function(id, data) {
             )
         )
 
+    data_spr <- SharedData$new(data)
+
+    output$spr_filter <- renderUI({
+        filter_checkbox(
+            "Status",
+            "Status",
+            inline = TRUE,
+            data_spr,
+            ~ Status
+        )
+    })
+
+    output$spr <- renderReactable({
       reactable(
-        data,
+        data_spr,
         wrap = TRUE,
+        searchable = TRUE,
         selection = "single",
         onClick = "select",
         rowStyle = JS("function(rowInfo) {

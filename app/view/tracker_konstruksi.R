@@ -13,13 +13,13 @@ ui <- function(id) {
 
   tagList(
     actionButton(
-        ns("add_pencairan"),
-        "Tambah bukti pencairan",
+        ns("add"),
+        "Tambah bukti transfer",
         class = "btn-add",
         icon = icon('plus'),
         width = "40%"
     ),
-    reactableOutput(ns("tbl_pencairan"))
+    reactableOutput(ns("tbl"))
   )
 }
 
@@ -28,26 +28,26 @@ server <- function(id, data) {
   moduleServer(id, function(input, output, session) {
     ns  <- session$ns
 
-    output$tbl_pencairan <- renderReactable({
+    output$tbl <- renderReactable({
         req(data())
         reactable(data())
     })
 
-    observeEvent(input$add_pencairan, {
+    observeEvent(input$add, {
         showModal(
             modalDialog(
                 div(
-                    class = "modal-pencairan",
+                    class = "modal-konstruksi",
                     dateInput(
-                        ns("date_pencairan"),
-                        label = "Tanggal Pencairan:"
+                        ns("date"),
+                        label = "Tanggal Transfer:"
                     ),
-                    span("Bukti Pencairan:", class = "label-modal"),
+                    span("Bukti Transfer:", class = "label-modal"),
                     tabsetPanel(
                         tabPanel(
                             "Google Drive URL",
                             textInput(
-                                ns("link_pencairan"),
+                                ns("url"),
                                 label = ""
                             )
                         ),
