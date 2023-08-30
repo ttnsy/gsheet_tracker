@@ -64,3 +64,16 @@ img {
     margin-bottom: 5px;
     font-weight: 700;
 }
+
+.container-input-kontraktor {
+    display: flex;
+    gap: 1em;
+    
+    button {
+        display: flex;
+        align-items: center;
+        align-self: center;
+        height: 34px;
+        margin-top: 10px;
+    }
+}

@@ -54,11 +54,11 @@ server <- function(id, sheet_id, data) {
     konstruksi  <- read_tracker(sheet_id, "konstruksi", clean_names = TRUE)
     kontraktor  <- read_tracker(sheet_id, "kontraktor", clean_names = TRUE)
 
-    summary_data  <- get_summary(pencairan, konstruksi, kontraktor)
+    data_summary  <- get_summary(pencairan, konstruksi, kontraktor)
 
     output$summary  <- renderReactable({
       reactable(
-        summary_data,
+        data_summary,
         searchable = TRUE
       )
     })
@@ -83,7 +83,13 @@ server <- function(id, sheet_id, data) {
           filter(blok_id == input$kavling)
     })
 
+    kontraktor  <- reactive({
+      req(input$kavling)
+      data_summary %>%
+        filter(`Blok/Kavling` == input$kavling)
+    })
+
     tracker_pencairan$server("pencairan", data_pencairan)
-    tracker_konstruksi$server("konstruksi", data_konstruksi)
+    tracker_konstruksi$server("konstruksi", data_konstruksi, kontraktor)
   })
 }
