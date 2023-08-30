@@ -1,5 +1,5 @@
 box::use(
-  shiny[navbarPage, tabPanel, moduleServer, NS, renderText, tags, textOutput],
+  shiny[navbarPage, tabPanel, moduleServer, NS, renderText, tags, reactive, reactiveVal],
   googlesheets4[...],
   glue[glue],
   dplyr[...]
@@ -38,7 +38,23 @@ server <- function(id) {
     url  <- "https://docs.google.com/spreadsheets/d/1iCKfGD1QAmdBChqlfp5-WnN8rms4hmAPmdjUXLe859w/edit?usp=sharing" # nolint: line_length_linter.
     sheet_id  <- as_sheets_id(url)
 
-    tbl_spr$server("tbl_spr", sheet_id)
-    # tracker$server("tracker", sheet_id, data = filter(spr(), Status == "Process"))
+    #' trigger to reload spr data from gsheet
+    session$userData$spr_trigger  <- reactiveVal(0)
+
+    spr <- reactive({
+      session$userData$spr_trigger()
+      out <- NULL
+
+      tryCatch({
+        out <- read_tracker(sheet_id, sheet_name = "spr")
+      }, error = function(e) {
+        print(e)
+        showToast("error", glue("error reading SPR sheet: {e}"))
+      })
+      out
+    })
+
+    tbl_spr$server("tbl_spr", sheet_id, spr = spr)
+    tracker$server("tracker", sheet_id, data = filter(spr(), Status == "Process"))
   })
 }

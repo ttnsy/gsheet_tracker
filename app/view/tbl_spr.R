@@ -32,25 +32,9 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id, sheet_id, data) {
+server <- function(id, sheet_id, spr) {
   moduleServer(id, function(input, output, session) {
     ns  <- session$ns
-
-    #' trigger to reload spr data from gsheet
-    session$userData$spr_trigger  <- reactiveVal(0)
-
-    spr <- reactive({
-      session$userData$spr_trigger()
-      out <- NULL
-
-      tryCatch({
-        out <- read_tracker(sheet_id, sheet_name = "spr")
-      }, error = function(e) {
-        print(e)
-        showToast("error", glue("error reading SPR sheet: {e}"))
-      })
-      out
-    })
 
     spr_clean <- reactive({
       req(spr())
@@ -109,7 +93,7 @@ server <- function(id, sheet_id, data) {
     })
 
     col_state <- reactive({
-        getReactableState("spr", "selected")
+      getReactableState("spr", "selected")
     })
 
     observeEvent(col_state(), {
