@@ -38,9 +38,7 @@ server <- function(id) {
     url  <- "https://docs.google.com/spreadsheets/d/1iCKfGD1QAmdBChqlfp5-WnN8rms4hmAPmdjUXLe859w/edit?usp=sharing" # nolint: line_length_linter.
     sheet_id  <- as_sheets_id(url)
 
-    spr <- read_tracker(sheet_id, sheet_name = "spr")
-
-    tbl_spr$server("tbl_spr", data = spr)
-    tracker$server("tracker", sheet_id = sheet_id, data = filter(spr, Status == "Process"))
+    tbl_spr$server("tbl_spr", sheet_id)
+    # tracker$server("tracker", sheet_id, data = filter(spr(), Status == "Process"))
   })
 }

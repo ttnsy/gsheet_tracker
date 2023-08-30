@@ -1,10 +1,16 @@
 box::use(
   shiny[...],
+  shinyFeedback[showToast],
+  googlesheets4[range_write],
   reactable[...],
   crosstalk[...],
   dplyr[...],
   glue[glue],
   htmlwidgets[JS]
+)
+
+box::use(
+  app/logic/utils_tracker[read_tracker]
 )
 
 js <- "
@@ -26,75 +32,47 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id, data) {
+server <- function(id, sheet_id, data) {
   moduleServer(id, function(input, output, session) {
     ns  <- session$ns
-    col_state <- reactive({
-        getReactableState("spr", "selected")
+
+    #' trigger to reload spr data from gsheet
+    session$userData$spr_trigger  <- reactiveVal(0)
+
+    spr <- reactive({
+      session$userData$spr_trigger()
+      out <- NULL
+
+      tryCatch({
+        out <- read_tracker(sheet_id, sheet_name = "spr")
+      }, error = function(e) {
+        print(e)
+        showToast("error", glue("error reading SPR sheet: {e}"))
+      })
+      out
     })
 
-    observeEvent(col_state(), {
-      to_edit  <- data[col_state(), ]
-
-      showModal(
-        modalDialog(
-          div(
-            class = "modal-edit",
-            selectInput(
-                ns("status"),
-                "Status",
-                choices = c("Cancel", "Process", "Reject"),
-                selected = to_edit$Status
-            )
-          ),
-          footer = list(
-            modalButton("Cancel"),
-            actionButton(
-                ns("submit"),
-                "Submit",
-                class = "btn btn-primary",
-                style = "color: white"
-            )
-          )
+    spr_clean <- reactive({
+      req(spr())
+      spr() %>%
+        select(-c("blok_id"))  %>%
+        mutate(
+          `Bukti Booking Fee` = as.character(
+          a("Gdrive Link", href = `Bukti Booking Fee`, target = "_blank")
         )
       )
     })
 
-    edit_dat <- reactive({
-        req(input$status)
-        hold  <- data[col_state(), ]
-        if (input$status != hold$Status) {
-            out <- hold %>%
-            mutate(Status = input$Status)
-        } else {
-            out  <- hold
-        }
-        return(
-            list(
-                data_old  = hold,
-                data_new = out
-            )
-        )
-    })
-
-    data <- data %>%
-        select(-c("blok_id"))  %>%
-        mutate(
-            `Bukti Booking Fee` = as.character(
-                a("Gdrive Link", href = `Bukti Booking Fee`, target = "_blank")
-            )
-        )
-
-    data_spr <- SharedData$new(data)
+    data_spr <- SharedData$new(spr_clean)
 
     output$spr_filter <- renderUI({
-        filter_checkbox(
-            "Status",
-            "Status",
-            inline = TRUE,
-            data_spr,
-            ~ Status
-        )
+      filter_checkbox(
+        "Status",
+        "Status",
+        inline = TRUE,
+        data_spr,
+        ~ Status
+      )
     })
 
     output$spr <- renderReactable({
@@ -128,6 +106,53 @@ server <- function(id, data) {
           )
         )
       )
+    })
+
+    col_state <- reactive({
+        getReactableState("spr", "selected")
+    })
+
+    observeEvent(col_state(), {
+      data <- spr_clean()
+      to_edit <- data[col_state(), ]
+
+      showModal(
+        modalDialog(
+          div(
+            class = "modal-edit",
+            selectInput(
+                ns("status"),
+                "Status",
+                choices = c("Cancel", "Process", "Reject"),
+                selected = to_edit$Status
+            )
+          ),
+          footer = list(
+            modalButton("Cancel"),
+            actionButton(
+                ns("submit"),
+                "Submit",
+                class = "btn btn-primary",
+                style = "color: white"
+            )
+          )
+        )
+      )
+    })
+
+    observeEvent(input$submit, {
+      req(input$status)
+      range  <- glue("X{col_state()+1}")
+      range_write(
+        sheet_id,
+        data = data.frame(Status = input$status),
+        sheet = "spr",
+        range = range, 
+        col_names = FALSE
+      )
+      removeModal()
+      session$userData$spr_trigger(session$userData$spr_trigger() + 1)
+      showToast("success", "Success updating status.")
     })
   })
 }
