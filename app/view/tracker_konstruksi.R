@@ -118,7 +118,7 @@ server <- function(id, data, summary) {
               class = "btn btn-primary",
               style = "color: white"
             )
-          ) 
+          )
         )
       )
     })

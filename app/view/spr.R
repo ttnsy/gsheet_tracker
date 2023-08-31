@@ -67,21 +67,21 @@ server <- function(id, sheet_id, spr_data) {
         selection = "single",
         onClick = "select",
         rowStyle = JS("function(rowInfo) {
-            if (rowInfo && rowInfo.selected) {
-            return { backgroundColor: '#eee', boxShadow: 'inset 2px 0 0 0 #ffa62d' }
-            }
+          if (rowInfo && rowInfo.selected) {
+          return { backgroundColor: '#eee', boxShadow: 'inset 2px 0 0 0 #ffa62d' }
+          }
         }"),
         columns = list(
           Status = colDef(
             style = function(value) {
-                if (value == "Process") {
-                    color <- "#008000"
-                } else if (value == "Reject") {
-                    color  <- "#e00000"
-                } else {
-                    color  <- "#777"
-                }
-                list(color = color, fontWeight = "bold")
+              if (value == "Process") {
+                color <- "#008000"
+              } else if (value == "Reject") {
+                color  <- "#e00000"
+              } else {
+                color  <- "#777"
+              }
+              list(color = color, fontWeight = "bold")
             },
             align = "center"
           ),
@@ -105,19 +105,19 @@ server <- function(id, sheet_id, spr_data) {
           div(
             class = "modal-edit",
             selectInput(
-                ns("status"),
-                "Status",
-                choices = c("Cancel", "Process", "Reject"),
-                selected = to_edit$Status
+              ns("status"),
+              "Status",
+              choices = c("Cancel", "Process", "Reject"),
+              selected = to_edit$Status
             )
           ),
           footer = list(
             modalButton("Cancel"),
             actionButton(
-                ns("submit"),
-                "Submit",
-                class = "btn btn-primary",
-                style = "color: white"
+              ns("submit"),
+              "Submit",
+              class = "btn btn-primary",
+              style = "color: white"
             )
           )
         )
@@ -131,7 +131,7 @@ server <- function(id, sheet_id, spr_data) {
         sheet_id,
         data = data.frame(Status = input$status),
         sheet = "spr",
-        range = range, 
+        range = range,
         col_names = FALSE
       )
       removeModal()
