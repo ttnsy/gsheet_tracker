@@ -24,7 +24,7 @@ box::use(
     app/logic/utils_tracker[...],
     app/logic/tracker_summary[...],
     app/view/pencairan,
-    app/view/tracker_konstruksi
+    app/view/konstruksi
 )
 
 #' @export
@@ -40,7 +40,7 @@ ui <- function(id) {
       class = "tracker-kavling",
       uiOutput(ns("kavling_ui")),
       pencairan$ui(ns("pencairan")),
-      tracker_konstruksi$ui(ns("konstruksi"))
+      konstruksi$ui(ns("konstruksi"))
     )
   )
 }
@@ -51,10 +51,10 @@ server <- function(id, sheet_id, data) {
     ns <- session$ns
 
     data_pencairan_raw  <- read_tracker(sheet_id, "pencairan", clean_names = TRUE)
-    konstruksi  <- read_tracker(sheet_id, "konstruksi", clean_names = TRUE)
-    kontraktor  <- read_tracker(sheet_id, "kontraktor", clean_names = TRUE)
+    data_konstruksi_raw  <- read_tracker(sheet_id, "konstruksi", clean_names = TRUE)
+    data_kontraktor_raw  <- read_tracker(sheet_id, "kontraktor", clean_names = TRUE)
 
-    data_summary  <- get_summary(data_pencairan_raw, konstruksi, kontraktor)
+    data_summary  <- get_summary(data_pencairan_raw, data_konstruksi_raw, data_kontraktor_raw)
 
     output$summary  <- renderReactable({
       reactable(
@@ -79,17 +79,17 @@ server <- function(id, sheet_id, data) {
 
     data_konstruksi  <- reactive({
         req(input$kavling)
-        konstruksi  %>%
+        data_konstruksi_raw  %>%
           filter(blok_id == input$kavling)
     })
 
-    kontraktor  <- reactive({
+    data_kontraktor  <- reactive({
       req(input$kavling)
       data_summary %>%
         filter(`Blok/Kavling` == input$kavling)
     })
 
     pencairan$server("pencairan", data = data_pencairan)
-    tracker_konstruksi$server("konstruksi", data_konstruksi, kontraktor)
+    konstruksi$server("konstruksi", data_konstruksi, data_kontraktor)
   })
 }
