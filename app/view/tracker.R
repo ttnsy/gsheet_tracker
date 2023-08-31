@@ -24,7 +24,8 @@ box::use(
     app/logic/utils_tracker[...],
     app/logic/tracker_summary[...],
     app/view/pencairan,
-    app/view/konstruksi
+    app/view/konstruksi,
+    app/view/input_kontraktor
 )
 
 #' @export
@@ -40,6 +41,7 @@ ui <- function(id) {
       class = "tracker-kavling",
       uiOutput(ns("blok_id_ui")),
       pencairan$ui(ns("pencairan")),
+      input_kontraktor$ui(ns("input_kontraktor")),
       konstruksi$ui(ns("konstruksi"))
     )
   )
@@ -83,13 +85,14 @@ server <- function(id, sheet_id, data) {
           filter(blok_id == input$blok_id)
     })
 
-    data_kontraktor  <- reactive({
+    data_summary_filtered  <- reactive({
       req(input$blok_id)
       data_summary %>%
         filter(`Blok/Kavling` == input$blok_id)
     })
 
     pencairan$server("pencairan", data = data_pencairan)
-    konstruksi$server("konstruksi", data_konstruksi, data_kontraktor)
+    input_kontraktor$server("input_kontraktor", data_summary_filtered)
+    konstruksi$server("konstruksi", data_konstruksi)
   })
 }
