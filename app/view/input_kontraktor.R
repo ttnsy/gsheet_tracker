@@ -22,29 +22,29 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id, data) {
+server <- function(id, data, data_filtered) {
   moduleServer(id, function(input, output, session) {
     ns  <- session$ns
 
     output$kontr_input_ui  <- renderUI({
-      req(data())
+      req(data_filtered())
       textInput(
         ns("kontraktor"),
         label = "Nama Kontraktor:",
-        value = data()$`Nama Kontraktor`
+        value = data_filtered()$`Nama Kontraktor`
       ) %>%
         disabled()
     })
 
     kontr_info  <- reactive({
-      data() %>%
+      data %>%
         clean_names() %>%
         count(nama_kontraktor, name = "Jumlah Kavling")
     })
 
     observeEvent(input$edit_kontraktor, {
       req(kontr_info())
-      req(data())
+      req(data_filtered())
 
       showModal(
         modalDialog(
@@ -53,7 +53,7 @@ server <- function(id, data) {
               ns("kontr_edit"),
               label = "Nama kontraktor:",
               choices = c("Asep", "Buyung"),
-              selected = data()$`Nama Kontraktor`
+              selected = data_filtered()$`Nama Kontraktor`
             ),
             reactable(kontr_info())
           )

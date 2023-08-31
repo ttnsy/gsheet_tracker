@@ -92,7 +92,7 @@ server <- function(id, sheet_id, data) {
     })
 
     pencairan$server("pencairan", data = data_pencairan)
-    input_kontraktor$server("input_kontraktor", data_summary_filtered)
+    input_kontraktor$server("input_kontraktor", data_summary, data_summary_filtered)
     konstruksi$server("konstruksi", data_konstruksi)
   })
 }
