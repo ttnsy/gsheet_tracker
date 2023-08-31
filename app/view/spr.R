@@ -32,13 +32,13 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id, sheet_id, spr) {
+server <- function(id, sheet_id, spr_data) {
   moduleServer(id, function(input, output, session) {
     ns  <- session$ns
 
     spr_clean <- reactive({
-      req(spr())
-      spr() %>%
+      req(spr_data())
+      spr_data() %>%
         select(-c("blok_id"))  %>%
         mutate(
           `Bukti Booking Fee` = as.character(
@@ -47,21 +47,21 @@ server <- function(id, sheet_id, spr) {
       )
     })
 
-    data_spr <- SharedData$new(spr_clean)
+    spr_shared <- SharedData$new(spr_clean)
 
     output$spr_filter <- renderUI({
       filter_checkbox(
         "Status",
         "Status",
         inline = TRUE,
-        data_spr,
+        spr_shared,
         ~ Status
       )
     })
 
     output$spr <- renderReactable({
       reactable(
-        data_spr,
+        spr_shared,
         wrap = TRUE,
         searchable = TRUE,
         selection = "single",

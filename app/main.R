@@ -7,7 +7,7 @@ box::use(
 
 box::use(
   app/logic/utils_tracker[read_tracker],
-  app/view/tbl_spr,
+  app/view/spr,
   app/view/tracker
 )
 
@@ -19,7 +19,7 @@ ui <- function(id) {
     title = "Tracker Sample",
     tabPanel(
       "Tabel SPR",
-      tbl_spr$ui(ns("tbl_spr"))
+      spr$ui(ns("spr"))
     ),
     tabPanel(
       "Tracker",
@@ -41,7 +41,7 @@ server <- function(id) {
     #' trigger to reload spr data from gsheet
     session$userData$spr_trigger  <- reactiveVal(0)
 
-    spr <- reactive({
+    spr_data <- reactive({
       session$userData$spr_trigger()
       out <- NULL
 
@@ -54,7 +54,7 @@ server <- function(id) {
       out
     })
 
-    tbl_spr$server("tbl_spr", sheet_id, spr = spr)
-    tracker$server("tracker", sheet_id, data = filter(spr(), Status == "Process"))
+    spr$server("spr", sheet_id, spr_data)
+    tracker$server("tracker", sheet_id, data = filter(spr_data(), Status == "Process"))
   })
 }
