@@ -1,8 +1,7 @@
 box::use(
   reactable[...],
-  dplyr[`%>%`, select, count],
-  shiny[...],
-  shinyjs[useShinyjs, enable, disable, disabled]
+  dplyr[`%>%`, select, everything],
+  shiny[...]
 )
 
 box::use(
@@ -14,7 +13,6 @@ ui <- function(id) {
   ns <- NS(id)
 
   tagList(
-    useShinyjs(),
     actionButton(
         ns("add"),
         "Tambah bukti transfer",

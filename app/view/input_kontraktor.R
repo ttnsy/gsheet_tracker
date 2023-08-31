@@ -2,7 +2,7 @@ box::use(
   shiny[...],
   janitor[clean_names],
   dplyr[`%>%`, count],
-  shinyjs[disabled],
+  shinyjs[useShinyjs, disabled],
   reactable[reactable]
 )
 
@@ -11,6 +11,7 @@ ui <- function(id) {
   ns <- NS(id)
   div(
     class="container-input-kontraktor",
+    useShinyjs(),
     uiOutput(ns("kontr_input_ui")),
     actionButton(
       ns("edit_kontraktor"),
