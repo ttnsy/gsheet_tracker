@@ -38,7 +38,7 @@ ui <- function(id) {
     ),
     div(
       class = "tracker-kavling",
-      uiOutput(ns("kavling_ui")),
+      uiOutput(ns("blok_id_ui")),
       pencairan$ui(ns("pencairan")),
       konstruksi$ui(ns("konstruksi"))
     )
@@ -63,30 +63,30 @@ server <- function(id, sheet_id, data) {
       )
     })
 
-    output$kavling_ui  <- renderUI({
+    output$blok_id_ui  <- renderUI({
         selectInput(
-        ns("kavling"),
+        ns("blok_id"),
         "Pilih Blok/Kavling:",
         choices = sort(data$blok_id)
       )
     })
 
     data_pencairan  <- reactive({
-        req(input$kavling)
+        req(input$blok_id)
         data_pencairan_raw %>%
-          filter(blok_id == input$kavling)
+          filter(blok_id == input$blok_id)
     })
 
     data_konstruksi  <- reactive({
-        req(input$kavling)
+        req(input$blok_id)
         data_konstruksi_raw  %>%
-          filter(blok_id == input$kavling)
+          filter(blok_id == input$blok_id)
     })
 
     data_kontraktor  <- reactive({
-      req(input$kavling)
+      req(input$blok_id)
       data_summary %>%
-        filter(`Blok/Kavling` == input$kavling)
+        filter(`Blok/Kavling` == input$blok_id)
     })
 
     pencairan$server("pencairan", data = data_pencairan)
