@@ -1,5 +1,5 @@
 box::use(
-  shiny[navbarPage, tabPanel, moduleServer, NS, renderText, tags, reactive, reactiveVal],
+  shiny[navbarPage, tabPanel, moduleServer, NS, renderText, tags, reactive, req, reactiveVal],
   googlesheets4[...],
   glue[glue],
   dplyr[...]
@@ -54,7 +54,13 @@ server <- function(id) {
       out
     })
 
+    spr_data_process  <- reactive({
+      req(spr_data())
+      spr_data() %>%
+        filter(Status == "Process")
+    })
+
     spr$server("spr", sheet_id, spr_data)
-    tracker$server("tracker", sheet_id, data = filter(spr_data(), Status == "Process"))
+    tracker$server("tracker", sheet_id, data = spr_data_process)
   })
 }

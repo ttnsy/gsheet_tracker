@@ -1,7 +1,7 @@
 box::use(
   shiny[...],
   janitor[clean_names],
-  dplyr[`%>%`, count],
+  dplyr[`%>%`, count, filter],
   shinyjs[useShinyjs, disabled],
   reactable[reactable]
 )
@@ -38,9 +38,10 @@ server <- function(id, data, data_filtered) {
     })
 
     kontr_info  <- reactive({
-      data %>%
+      data() %>%
         clean_names() %>%
-        count(nama_kontraktor, name = "Jumlah Kavling")
+        filter(!is.na(nama_kontraktor)) %>%
+        count(nama_kontraktor, name = "Jumlah Kavling",)
     })
 
     observeEvent(input$edit_kontraktor, {

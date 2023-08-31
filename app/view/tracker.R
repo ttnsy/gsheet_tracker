@@ -56,11 +56,25 @@ server <- function(id, sheet_id, data) {
     data_konstruksi_raw  <- read_tracker(sheet_id, "konstruksi", clean_names = TRUE)
     data_kontraktor_raw  <- read_tracker(sheet_id, "kontraktor", clean_names = TRUE)
 
-    data_summary  <- get_summary(data_pencairan_raw, data_konstruksi_raw, data_kontraktor_raw)
+    data_summary  <- reactive({
+      req(data())
+      summary  <- get_summary(
+        data_pencairan_raw,
+        data_konstruksi_raw,
+        data_kontraktor_raw
+      )
+      data() %>%
+        select(
+          Nama,
+          `Blok/Kavling` = blok_id,
+          `Sistem Pembayaran`
+        ) %>%
+        left_join(summary)
+    })
 
     output$summary  <- renderReactable({
       reactable(
-        data_summary,
+        data_summary(),
         searchable = TRUE
       )
     })
@@ -69,7 +83,7 @@ server <- function(id, sheet_id, data) {
         selectInput(
         ns("blok_id"),
         "Pilih Blok/Kavling:",
-        choices = sort(data$blok_id)
+        choices = sort(data()$blok_id)
       )
     })
 
@@ -87,7 +101,7 @@ server <- function(id, sheet_id, data) {
 
     data_summary_filtered  <- reactive({
       req(input$blok_id)
-      data_summary %>%
+      data_summary() %>%
         filter(`Blok/Kavling` == input$blok_id)
     })
 
