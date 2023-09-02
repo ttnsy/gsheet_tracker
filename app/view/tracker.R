@@ -23,9 +23,9 @@ box::use(
 box::use(
     app/logic/utils_tracker[...],
     app/logic/tracker_summary[...],
-    app/view/pencairan,
-    app/view/konstruksi,
-    app/view/input_kontraktor
+    app/view/input_bukti,
+    app/view/input_kontraktor,
+    app/view/table_bukti
 )
 
 #' @export
@@ -40,9 +40,11 @@ ui <- function(id) {
     div(
       class = "tracker-kavling",
       uiOutput(ns("blok_id_ui")),
-      pencairan$ui(ns("pencairan")),
+      input_bukti$ui(ns("pencairan")),
+      table_bukti$ui(ns("pencairan")),
       input_kontraktor$ui(ns("input_kontraktor")),
-      konstruksi$ui(ns("konstruksi"))
+      input_bukti$ui(ns("konstruksi")),
+      table_bukti$ui(ns("konstruksi"))
     )
   )
 }
@@ -105,8 +107,10 @@ server <- function(id, sheet_id, data) {
         filter(`Blok/Kavling` == input$blok_id)
     })
 
-    pencairan$server("pencairan", data = data_pencairan)
+    input_bukti$server("pencairan", "pencairan")
+    table_bukti$server("pencairan", data_pencairan)
     input_kontraktor$server("input_kontraktor", data_summary, data_summary_filtered)
-    konstruksi$server("konstruksi", data_konstruksi)
+    input_bukti$server("konstruksi", "transfer")
+    table_bukti$server("konstruksi", data_konstruksi)
   })
 }

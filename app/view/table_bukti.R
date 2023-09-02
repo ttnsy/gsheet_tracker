@@ -1,30 +1,23 @@
 box::use(
-  reactable[...],
   dplyr[`%>%`, select],
-  shiny[...],
+  reactable[reactable, renderReactable, reactableOutput],
+  shiny[...]
 )
 
 box::use(
-  app/logic/utils_tracker[clean_tracker_cols],
-  app/view/input_bukti
+  app/logic/utils_tracker[clean_tracker_cols]
 )
 
 #' @export
 ui <- function(id) {
   ns <- NS(id)
 
-  tagList(
-    input_bukti$ui(ns("pencairan")),
-    reactableOutput(ns("tbl"))
-  )
+  reactableOutput(ns("tbl"))
 }
 
 #' @export
 server <- function(id, data) {
   moduleServer(id, function(input, output, session) {
-    ns  <- session$ns
-
-    input_bukti$server("pencairan", "pencairan")
 
     output$tbl <- renderReactable({
       req(data())
