@@ -1,6 +1,7 @@
 box::use(
   shiny[navbarPage, tabPanel, moduleServer, NS, renderText, tags, reactive, req, reactiveVal],
   googlesheets4[...],
+  googledrive[drive_auth],
   glue[glue],
   dplyr[...]
 )
@@ -35,6 +36,7 @@ ui <- function(id) {
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
     gs4_auth(cache = ".secrets", email = "tanesya.t@gmail.com")
+    drive_auth(cache = ".secrets", email = "tanesya.t@gmail.com")
     url  <- "https://docs.google.com/spreadsheets/d/1iCKfGD1QAmdBChqlfp5-WnN8rms4hmAPmdjUXLe859w/edit?usp=sharing" # nolint: line_length_linter.
     sheet_id  <- as_sheets_id(url)
 

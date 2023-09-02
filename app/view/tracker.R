@@ -1,18 +1,5 @@
 box::use(
-  shiny[
-    div,
-    span,
-    req,
-    reactive,
-    NS,
-    h3,
-    tags,
-    tagList,
-    moduleServer,
-    selectInput,
-    uiOutput,
-    renderUI
-  ],
+  shiny[...],
   reactable[...],
   glue[glue],
   dplyr[...],
@@ -21,11 +8,11 @@ box::use(
 )
 
 box::use(
-    app/logic/utils_tracker[...],
-    app/logic/tracker_summary[...],
-    app/view/input_bukti,
-    app/view/input_kontraktor,
-    app/view/table_bukti
+  app/logic/utils_tracker[...],
+  app/logic/tracker_summary[...],
+  app/view/input_bukti,
+  app/view/input_kontraktor,
+  app/view/table_bukti
 )
 
 #' @export
@@ -58,6 +45,15 @@ server <- function(id, sheet_id, data) {
     data_konstruksi_raw  <- read_tracker(sheet_id, "konstruksi", clean_names = TRUE)
     data_kontraktor_raw  <- read_tracker(sheet_id, "kontraktor", clean_names = TRUE)
 
+    data_main  <- reactive({
+      data() %>%
+        select(
+          Nama,
+          blok_id,
+          `Sistem Pembayaran`
+        )
+    })
+
     data_summary  <- reactive({
       req(data())
       summary  <- get_summary(
@@ -65,12 +61,8 @@ server <- function(id, sheet_id, data) {
         data_konstruksi_raw,
         data_kontraktor_raw
       )
-      data() %>%
-        select(
-          Nama,
-          `Blok/Kavling` = blok_id,
-          `Sistem Pembayaran`
-        ) %>%
+      data_main() %>%
+        rename(`Blok/Kavling` = blok_id) %>%
         left_join(summary)
     })
 
@@ -101,13 +93,19 @@ server <- function(id, sheet_id, data) {
           filter(blok_id == input$blok_id)
     })
 
+    data_main_filtered  <- reactive({
+      req(input$blok_id)
+      data_main() %>%
+        filter(blok_id == input$blok_id)
+    })
+
     data_summary_filtered  <- reactive({
       req(input$blok_id)
       data_summary() %>%
         filter(`Blok/Kavling` == input$blok_id)
     })
 
-    input_bukti$server("pencairan", "pencairan")
+    input_bukti$server("pencairan", "pencairan", data_main_filtered, sheet_id, sheet = "pencairan")
     table_bukti$server("pencairan", data_pencairan)
     input_kontraktor$server("input_kontraktor", data_summary, data_summary_filtered)
     input_bukti$server("konstruksi", "transfer")

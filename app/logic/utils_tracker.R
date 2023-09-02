@@ -1,5 +1,5 @@
 box::use(
-    dplyr[`%>%`, select, mutate, rename, rename_with],
+    dplyr[`%>%`, all_of, select, mutate, rename, rename_with, rename_all],
     glue[glue],
     googlesheets4[read_sheet],
     janitor[clean_names],
@@ -25,4 +25,25 @@ clean_tracker_cols  <- function(data) {
     select(-c("blok", "nomor_kavling")) %>%
     rename("Blok/Kavling" = "blok_id")  %>%
     rename_with(~str_to_title(gsub("_", " ", .)))
+}
+
+#' @export
+generate_data_bukti  <- function(cols_rules, data_main, date, link){
+  stopifnot("blok_id" %in% colnames(data_main))
+  stopifnot(inherits(date, "Date"))
+
+  cols <- unlist(cols_rules, use.names=FALSE)
+  cols_target  <- names(cols_rules)
+
+  out <- data_main %>%
+    mutate(
+      blok = strsplit(blok_id, "[/]")[[1]][1],
+      nomor_kavling = strsplit(blok_id, "[/]")[[1]][2],
+      date = date,
+      link = link
+    ) %>%
+    select(all_of(cols)) %>%
+    rename_all(~ as.character(cols_target))
+
+  out
 }
