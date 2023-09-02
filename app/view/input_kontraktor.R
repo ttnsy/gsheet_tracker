@@ -32,7 +32,7 @@ server <- function(id, data, data_filtered) {
       textInput(
         ns("kontraktor"),
         label = "Nama Kontraktor:",
-        value = data_filtered()$`Nama Kontraktor`
+        value = data_filtered()$nama_kontraktor
       ) %>%
         disabled()
     })
@@ -55,7 +55,7 @@ server <- function(id, data, data_filtered) {
               ns("kontr_edit"),
               label = "Nama kontraktor:",
               choices = c("Asep", "Buyung"),
-              selected = data_filtered()$`Nama Kontraktor`
+              selected = data_filtered()$nama_kontraktor
             ),
             reactable(kontr_info())
           )

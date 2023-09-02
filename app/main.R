@@ -3,7 +3,8 @@ box::use(
   googlesheets4[...],
   googledrive[drive_auth],
   glue[glue],
-  dplyr[...]
+  dplyr[...],
+  config[get]
 )
 
 box::use(
@@ -35,10 +36,12 @@ ui <- function(id) {
 #' @export
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
-    gs4_auth(cache = ".secrets", email = "tanesya.t@gmail.com")
-    drive_auth(cache = ".secrets", email = "tanesya.t@gmail.com")
-    url  <- "https://docs.google.com/spreadsheets/d/1iCKfGD1QAmdBChqlfp5-WnN8rms4hmAPmdjUXLe859w/edit?usp=sharing" # nolint: line_length_linter.
-    sheet_id  <- as_sheets_id(url)
+    google_mail <- Sys.getenv("GOOGLE_MAIL")
+    google_sheet_url  <- Sys.getenv("GOOGLE_SHEET_URL")
+
+    gs4_auth(cache = ".secrets", email = google_mail)
+    drive_auth(cache = ".secrets", email = google_mail)
+    sheet_id  <- as_sheets_id(google_sheet_url)
 
     #' trigger to reload spr data from gsheet
     session$userData$spr_trigger  <- reactiveVal(0)
@@ -46,12 +49,11 @@ server <- function(id) {
     spr_data <- reactive({
       session$userData$spr_trigger()
       out <- NULL
-
       tryCatch({
         out <- read_tracker(sheet_id, sheet_name = "spr")
       }, error = function(e) {
         print(e)
-        showToast("error", glue("error reading SPR sheet: {e}"))
+        # showToast("error", glue("error reading SPR sheet: {e}"))
       })
       out
     })

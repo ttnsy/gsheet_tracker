@@ -1,0 +1,48 @@
+default:
+  spr:
+    Timestamp: timestamp
+    Bukti Booking Fee: bukti_booking_fee
+    Nama: nama
+    NIK: nik
+    Pekerjaan: pekerjaan
+    Alamat Sesuai KTP: alamat
+    Nomor Telp/Hp Aktif: telp
+    Email: email
+    Tipe Rumah yang Diminati dan Luas Tanah: tipe_dan_lt
+    Blok: blok
+    Nomor Kavling: no_kavling
+    Acuan Harga Tanah: acuan_harga
+    Harga Tanah & Bangunan : harga_tanah_bangunan
+    DP (%): dp
+    Plafond: plafond
+    Tanda Jadi/Booking Fee: booking_fee
+    Lain-Lain: lain_lain
+    Diskon: disc
+    Sistem Pembayaran: sistem_pembayaran
+    Nama Sales: nama_sales
+    Tenor: tenor
+    UID: uid
+    Duplicate Flag: dupes
+    Status: status
+  pencairan:
+    Nama: nama
+    Sistem Pembayaran: sistem_pembayaran
+    Blok/Kavling: blok_id
+    Blok: blok
+    Nomor Kavling: no_kavling
+    Tanggal Pencairan: date
+    Bukti Pencairan: link
+  konstruksi:
+    Nama: nama
+    Sistem Pembayaran: sistem_pembayaran
+    Blok/Kavling: blok_id
+    Blok: blok
+    Nomor Kavling: no_kavling
+    Tanggal Pencairan: date
+    Bukti Pencairan: link
+  kontraktor:
+    Nama Kontraktor: nama_kontraktor
+    Blok/Kavling: blok_id
+    Blok: blok
+    Nomor Kavling: no_kavling
+  

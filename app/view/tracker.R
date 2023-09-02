@@ -40,17 +40,33 @@ ui <- function(id) {
 server <- function(id, sheet_id, data) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+    data_cols  <- config::get(file = "data_cols.yml")
 
-    data_pencairan_raw  <- read_tracker(sheet_id, "pencairan", clean_names = TRUE)
-    data_konstruksi_raw  <- read_tracker(sheet_id, "konstruksi", clean_names = TRUE)
-    data_kontraktor_raw  <- read_tracker(sheet_id, "kontraktor", clean_names = TRUE)
+    data_pencairan_raw  <- read_tracker(
+      sheet_id,
+      "pencairan",
+      col_names = data_cols[["pencairan"]]
+    )
+
+    data_konstruksi_raw  <- read_tracker(
+      sheet_id,
+      "konstruksi",
+      col_names = data_cols[["konstruksi"]]
+    )
+
+    data_kontraktor_raw  <- read_tracker(
+      sheet_id,
+      "kontraktor",
+      col_names = data_cols[["kontraktor"]]
+    )
 
     data_main  <- reactive({
       data() %>%
+        rename_sheet_cols(data_cols[["spr"]]) %>%
         select(
-          Nama,
+          nama,
           blok_id,
-          `Sistem Pembayaran`
+          sistem_pembayaran
         )
     })
 
@@ -62,7 +78,6 @@ server <- function(id, sheet_id, data) {
         data_kontraktor_raw
       )
       data_main() %>%
-        rename(`Blok/Kavling` = blok_id) %>%
         left_join(summary)
     })
 
@@ -102,7 +117,7 @@ server <- function(id, sheet_id, data) {
     data_summary_filtered  <- reactive({
       req(input$blok_id)
       data_summary() %>%
-        filter(`Blok/Kavling` == input$blok_id)
+        filter(blok_id == input$blok_id)
     })
 
     input_bukti$server("pencairan", "pencairan", data_main_filtered, sheet_id, sheet = "pencairan")
