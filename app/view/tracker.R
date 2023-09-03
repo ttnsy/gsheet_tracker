@@ -10,6 +10,7 @@ box::use(
 box::use(
   app/logic/utils_tracker[...],
   app/logic/tracker_summary[...],
+  app/view/pencairan,
   app/view/input_bukti,
   app/view/input_kontraktor,
   app/view/table_bukti
@@ -27,8 +28,7 @@ ui <- function(id) {
     div(
       class = "tracker-kavling",
       uiOutput(ns("blok_id_ui")),
-      input_bukti$ui(ns("pencairan")),
-      table_bukti$ui(ns("pencairan")),
+      pencairan$ui(ns("pencairan")),
       input_kontraktor$ui(ns("input_kontraktor")),
       input_bukti$ui(ns("konstruksi")),
       table_bukti$ui(ns("konstruksi"))
@@ -41,23 +41,29 @@ server <- function(id, sheet_id, data) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     data_cols  <- config::get(file = "data_cols.yml")
+    cols_pencairan  <- data_cols[["pencairan"]]
+    cols_konstruksi  <- data_cols[["konstruksi"]]
+    cols_kontraktor  <- data_cols[["kontraktor"]]
 
-    data_pencairan_raw  <- read_tracker(
-      sheet_id,
-      "pencairan",
-      col_names = data_cols[["pencairan"]]
-    )
+    data_pencairan_raw  <- reactive({
+      session$userData$pencairan_trigger()
+      read_tracker(
+        sheet_id,
+        "pencairan",
+        cols_rules = cols_pencairan
+      )
+    })
 
     data_konstruksi_raw  <- read_tracker(
       sheet_id,
       "konstruksi",
-      col_names = data_cols[["konstruksi"]]
+      cols_rules = cols_konstruksi
     )
 
     data_kontraktor_raw  <- read_tracker(
       sheet_id,
       "kontraktor",
-      col_names = data_cols[["kontraktor"]]
+      cols_rules = cols_kontraktor
     )
 
     data_main  <- reactive({
@@ -72,8 +78,9 @@ server <- function(id, sheet_id, data) {
 
     data_summary  <- reactive({
       req(data())
+      data_pencairan  <- data_pencairan_raw()
       summary  <- get_summary(
-        data_pencairan_raw,
+        data_pencairan,
         data_konstruksi_raw,
         data_kontraktor_raw
       )
@@ -96,12 +103,6 @@ server <- function(id, sheet_id, data) {
       )
     })
 
-    data_pencairan  <- reactive({
-        req(input$blok_id)
-        data_pencairan_raw %>%
-          filter(blok_id == input$blok_id)
-    })
-
     data_konstruksi  <- reactive({
         req(input$blok_id)
         data_konstruksi_raw  %>%
@@ -120,9 +121,16 @@ server <- function(id, sheet_id, data) {
         filter(blok_id == input$blok_id)
     })
 
-    input_bukti$server("pencairan", "pencairan", data_main_filtered, sheet_id, sheet = "pencairan")
-    table_bukti$server("pencairan", data_pencairan)
     input_kontraktor$server("input_kontraktor", data_summary, data_summary_filtered)
+
+    pencairan$server(
+      "pencairan",
+      sheet_id,
+      data_main = data_main_filtered,
+      data_pencairan_raw = data_pencairan_raw,
+      cols_rules = cols_pencairan
+    )
+
     input_bukti$server("konstruksi", "transfer")
     table_bukti$server("konstruksi", data_konstruksi)
   })

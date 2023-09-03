@@ -8,23 +8,28 @@ box::use(
 )
 
 #' @export
-rename_sheet_cols  <- function(dat, cols_list, revert=FALSE) {
-  cols_to  <- unlist(cols_list)
+rename_sheet_cols  <- function(dat, cols_rules, revert=FALSE, rearrange=FALSE) {
+  cols_to  <- unlist(cols_rules)
   if (isFALSE(revert)) {
     cols_to <- setNames(names(cols_to), cols_to)
   }
-  dat %>%
+  dat <- dat %>%
     rename(any_of(cols_to))
+  if(rearrange) {
+    dat <- dat %>%
+    select(any_of(names(cols_to)))
+  }
+  dat
 }
 
 #' @export
-read_tracker  <- function(sheet_id, sheet_name, col_names = NULL) {
+read_tracker  <- function(sheet_id, sheet_name, cols_rules = NULL) {
   dat  <- read_sheet(sheet_id, sheet_name)
   dat  <-  dat %>%
     mutate(blok_id = glue("{Blok}/{`Nomor Kavling`}")) 
 
-  if(!is.null(col_names)){
-    dat <- rename_sheet_cols(dat, col_names)
+  if(!is.null(cols_rules)){
+    dat <- rename_sheet_cols(dat, cols_rules)
   }
   return(dat)
 }
@@ -38,12 +43,9 @@ clean_tracker_cols  <- function(data) {
 }
 
 #' @export
-generate_data_bukti  <- function(cols_rules, data_main, date, link){
+generate_data_bukti  <- function(data_main, date, link){
   stopifnot("blok_id" %in% colnames(data_main))
   stopifnot(inherits(date, "Date"))
-
-  cols <- unlist(cols_rules, use.names=FALSE)
-  cols_target  <- names(cols_rules)
 
   out <- data_main %>%
     mutate(
@@ -52,8 +54,7 @@ generate_data_bukti  <- function(cols_rules, data_main, date, link){
       date = date,
       link = link
     ) %>%
-    select(all_of(cols)) %>%
-    rename_all(~ as.character(cols_target))
+    select(-blok_id)
 
   out
 }

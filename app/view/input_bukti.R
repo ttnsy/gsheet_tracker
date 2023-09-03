@@ -9,7 +9,7 @@ box::use(
 )
 
 box::use(
-  app/logic/utils_tracker[generate_data_bukti]
+  app/logic/utils_tracker[generate_data_bukti, rename_sheet_cols]
 )
 
 #' @export
@@ -19,7 +19,7 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id, label, data_main_filtered, sheet_id, sheet) {
+server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, trigger) {
   moduleServer(id, function(input, output, session) {
     ns  <- session$ns
 
@@ -104,16 +104,16 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet) {
       date <- out()$date
       link <- out()$link
       data_main  <- data_main_filtered() %>% clean_names()
-      cols_rules  <- config::get(file = "data_cols.yml")[[sheet]]
 
       dat <- generate_data_bukti(
-        cols_rules,
         data_main,
         date,
         link
       )
 
+      dat <- rename_sheet_cols(dat, cols_rules, revert=TRUE, rearrange=TRUE)
       sheet_append(sheet_id, dat, sheet = sheet)
+      trigger(trigger() + 1)
       removeModal()
     })
   })

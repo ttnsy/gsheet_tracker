@@ -43,8 +43,10 @@ server <- function(id) {
     drive_auth(cache = ".secrets", email = google_mail)
     sheet_id  <- as_sheets_id(google_sheet_url)
 
-    #' trigger to reload spr data from gsheet
+    #' trigger to reload data from gsheet
     session$userData$spr_trigger  <- reactiveVal(0)
+    session$userData$pencairan_trigger <- reactiveVal(0)
+    session$userData$konstruksi_trigger <- reactiveVal(0)
 
     spr_data <- reactive({
       session$userData$spr_trigger()
