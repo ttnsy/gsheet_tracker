@@ -110,7 +110,9 @@ server <- function(id, sheet_id, data) {
       blok_id = reactive({
         input$blok_id
       }),
-      data = data_summary
+      cols_rules = cols_kontraktor,
+      data = data_summary,
+      sheet_id
     )
 
     pencairan$server(

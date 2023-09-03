@@ -1,9 +1,15 @@
 box::use(
   shiny[...],
+  shinyFeedback[...],
+  googlesheets4[sheet_append],
   janitor[clean_names],
-  dplyr[`%>%`, count, filter],
+  dplyr[`%>%`, count, filter, tibble],
   shinyjs[useShinyjs, disabled],
   reactable[reactable]
+)
+
+box::use(
+  app/logic/utils_tracker[rename_sheet_cols]
 )
 
 #' @export
@@ -23,7 +29,7 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id, blok_id, data) {
+server <- function(id, blok_id, cols_rules, data, sheet_id) {
   moduleServer(id, function(input, output, session) {
     ns  <- session$ns
 
@@ -64,9 +70,38 @@ server <- function(id, blok_id, data) {
               selected = data_filtered()$nama_kontraktor
             ),
             reactable(kontr_info())
+          ),
+          footer = list(
+            modalButton("Cancel"),
+            actionButton(
+              ns("submit"),
+              "Submit",
+              class = "btn btn-primary",
+              style = "color: white"
+            )
           )
         )
       )
+    })
+
+    out <- eventReactive(input$submit, {
+      req(blok_id())
+      req(input$kontr_edit)
+
+      tibble(
+        nama_kontraktor = input$kontr_edit,
+        blok = strsplit(blok_id(), "[/]")[[1]][1],
+        no_kavling = strsplit(blok_id(), "[/]")[[1]][2],
+      ) %>%
+      rename_sheet_cols(cols_rules, revert=TRUE, rearrange=TRUE)
+    })
+
+    observeEvent(out(), {
+      req(out())
+      dat <- out()
+      sheet_append(sheet_id, dat, sheet = "kontraktor")
+      session$userData$kontraktor_trigger(session$userData$kontraktor_trigger()+1)
+      removeModal()
     })
   })
 }
