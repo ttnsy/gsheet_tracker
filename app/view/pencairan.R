@@ -1,17 +1,12 @@
 box::use(
   shiny[...],
   reactable[...],
-  glue[glue],
-  dplyr[...],
-  googlesheets4[...],
-  janitor[clean_names]
+  dplyr[...]
 )
 
 box::use(
   app/logic/utils_tracker[...],
-  app/logic/tracker_summary[...],
   app/view/input_bukti,
-  app/view/input_kontraktor,
   app/view/table_bukti
 )
 
