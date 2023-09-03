@@ -84,6 +84,7 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, t
       }
       if (!is.null(input$upload)) {
         res  <- drive_upload(
+          path = "pk-tracker_sample",
           media = input$upload$datapath,
           name = input$upload$name
         )
