@@ -35,7 +35,7 @@ server <- function(id, sheet_id, data_main, data_konstruksi_raw, cols_rules) {
         filter(blok_id == blok_id_selected)
     })
 
-    input_bukti$server("input", "konstruksi", data_main, sheet_id, sheet, cols_rules, trigger)
+    input_bukti$server("input", "transfer", data_main, sheet_id, sheet, cols_rules, trigger)
     table_bukti$server("table", data_konstruksi, cols_rules)
   })
 }
