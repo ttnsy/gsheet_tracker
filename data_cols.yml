@@ -38,8 +38,8 @@ default:
     Blok/ Kavling: blok_id
     Blok: blok
     Nomor Kavling: no_kavling
-    Tanggal Pencairan: date
-    Bukti Pencairan: link
+    Tanggal Transfer: date
+    Bukti Transfer: link
   kontraktor:
     Nama Kontraktor: nama_kontraktor
     Blok/ Kavling: blok_id

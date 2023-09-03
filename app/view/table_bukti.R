@@ -22,6 +22,7 @@ server <- function(id, data, cols_rules) {
 
     output$tbl <- renderReactable({
       req(data())
+
       dat <- data() %>%
         select(-c("blok", "no_kavling")) %>%
         mutate(
