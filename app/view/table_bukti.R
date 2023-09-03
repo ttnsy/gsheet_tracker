@@ -1,7 +1,8 @@
 box::use(
-  dplyr[`%>%`, select],
-  reactable[reactable, renderReactable, reactableOutput],
-  shiny[...]
+  dplyr[`%>%`, select, mutate],
+  reactable[colDef, reactable, renderReactable, reactableOutput],
+  shiny[...],
+  rlang[...]
 )
 
 box::use(
@@ -22,10 +23,26 @@ server <- function(id, data, cols_rules) {
     output$tbl <- renderReactable({
       req(data())
       dat <- data() %>%
-        select(-blok_id)
-      data <- rename_sheet_cols(dat, cols_rules, revert=TRUE, rearrange=TRUE)
+        select(-c("blok", "no_kavling")) %>%
+        mutate(
+          link = glue::glue('<a href="{link}" target="_blank">Gdrive Link</a>')
+        )
+      link  <- dat$link
 
-      reactable(data)
+      dat <- dat %>%
+        select(-link) %>%
+        rename_sheet_cols(cols_rules, revert=TRUE, rearrange=TRUE) %>%
+        cbind(link)
+
+      reactable(
+        dat,
+        columns = list(
+          link = colDef(
+            name = names(cols_rules[cols_rules == "link"]),
+            html = TRUE
+          )
+        )
+      )
     })
   })
 }

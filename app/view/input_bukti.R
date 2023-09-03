@@ -89,6 +89,7 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, t
           name = input$upload$name
         )
         link  <- res$id
+        link <- glue("https://drive.google.com/file/d/{res$id}")
       }
       return(
         list(
