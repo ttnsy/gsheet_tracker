@@ -73,11 +73,14 @@ server <- function(id, sheet_id, data) {
       )
     })
 
-    data_kontraktor_raw  <- read_tracker(
-      sheet_id,
-      "kontraktor",
-      cols_rules = cols_kontraktor
-    )
+    data_kontraktor_raw  <- reactive({
+      session$userData$kontraktor_trigger()
+      read_tracker(
+        sheet_id,
+        "kontraktor",
+        cols_rules = cols_kontraktor
+      )
+    })
 
     output$blok_id_ui  <- renderUI({
         selectInput(

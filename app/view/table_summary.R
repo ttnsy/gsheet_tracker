@@ -22,11 +22,12 @@ server <- function(id, data_main, data_pencairan, data_konstruksi, data_kontrakt
       req(data_main())
       pencairan  <- data_pencairan()
       konstruksi <- data_konstruksi()
+      kontraktor  <- data_kontraktor()
 
       summary  <- get_summary(
         pencairan,
         konstruksi,
-        data_kontraktor
+        kontraktor
       )
       data_main() %>%
         left_join(summary)

@@ -47,17 +47,11 @@ server <- function(id) {
     session$userData$spr_trigger  <- reactiveVal(0)
     session$userData$pencairan_trigger <- reactiveVal(0)
     session$userData$konstruksi_trigger <- reactiveVal(0)
+    session$userData$kontraktor_trigger  <- reactiveVal(0)
 
     spr_data <- reactive({
       session$userData$spr_trigger()
-      out <- NULL
-      tryCatch({
-        out <- read_tracker(sheet_id, sheet_name = "spr")
-      }, error = function(e) {
-        print(e)
-        # showToast("error", glue("error reading SPR sheet: {e}"))
-      })
-      out
+      read_tracker(sheet_id, sheet_name = "spr")
     })
 
     spr_data_process  <- reactive({
