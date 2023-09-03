@@ -23,9 +23,15 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id, data, data_filtered) {
+server <- function(id, blok_id, data) {
   moduleServer(id, function(input, output, session) {
     ns  <- session$ns
+
+    data_filtered  <- reactive({
+      req(blok_id())
+      data() %>%
+        filter(blok_id == blok_id())
+    })
 
     output$kontr_input_ui  <- renderUI({
       req(data_filtered())
@@ -41,7 +47,7 @@ server <- function(id, data, data_filtered) {
       data() %>%
         clean_names() %>%
         filter(!is.na(nama_kontraktor)) %>%
-        count(nama_kontraktor, name = "Jumlah Kavling",)
+        count(nama_kontraktor, name = "Jumlah Kavling")
     })
 
     observeEvent(input$edit_kontraktor, {
