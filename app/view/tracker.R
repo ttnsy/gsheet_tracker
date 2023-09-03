@@ -43,6 +43,7 @@ server <- function(id, sheet_id, data) {
     cols_pencairan  <- data_cols[["pencairan"]]
     cols_konstruksi  <- data_cols[["konstruksi"]]
     cols_kontraktor  <- data_cols[["kontraktor"]]
+    cols_summary  <- data_cols[["summary"]]
 
     data_main  <- reactive({
       data() %>%
@@ -97,7 +98,8 @@ server <- function(id, sheet_id, data) {
       data_main,
       data_pencairan_raw,
       data_konstruksi_raw,
-      data_kontraktor_raw
+      data_kontraktor_raw,
+      cols_rules = cols_summary
     )
 
     input_kontraktor$server(

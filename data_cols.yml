@@ -27,7 +27,7 @@ default:
   pencairan:
     Nama: nama
     Sistem Pembayaran: sistem_pembayaran
-    Blok/Kavling: blok_id
+    Blok/ Kavling: blok_id
     Blok: blok
     Nomor Kavling: no_kavling
     Tanggal Pencairan: date
@@ -35,14 +35,24 @@ default:
   konstruksi:
     Nama: nama
     Sistem Pembayaran: sistem_pembayaran
-    Blok/Kavling: blok_id
+    Blok/ Kavling: blok_id
     Blok: blok
     Nomor Kavling: no_kavling
     Tanggal Pencairan: date
     Bukti Pencairan: link
   kontraktor:
     Nama Kontraktor: nama_kontraktor
-    Blok/Kavling: blok_id
+    Blok/ Kavling: blok_id
     Blok: blok
     Nomor Kavling: no_kavling
+  summary:
+    Nama: nama
+    Blok/ Kavling: blok_id
+    Sistem Pembayaran: sistem_pembayaran
+    Jumlah Pencairan: jml_pencairan
+    Nama Kontraktor: nama_kontraktor
+    Blok: blok
+    Nomor Kavling: no_kavling
+    Termin (Available): termin_avail
+    Termin (Done): termin_done
   
