@@ -5,7 +5,7 @@ box::use(
 )
 
 box::use(
-  app/logic/utils_tracker[clean_tracker_cols]
+  app/logic/utils_tracker[rename_sheet_cols]
 )
 
 #' @export
@@ -16,13 +16,14 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id, data) {
+server <- function(id, data, cols_rules) {
   moduleServer(id, function(input, output, session) {
 
     output$tbl <- renderReactable({
       req(data())
-      data <- clean_tracker_cols(data()) %>%
-        select(c("Nama", "Sistem Pembayaran", "Blok/Kavling", everything()))
+      dat <- data() %>%
+        select(-blok_id)
+      data <- rename_sheet_cols(dat, cols_rules, revert=TRUE, rearrange=TRUE)
 
       reactable(data)
     })

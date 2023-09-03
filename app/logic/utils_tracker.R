@@ -35,14 +35,6 @@ read_tracker  <- function(sheet_id, sheet_name, cols_rules = NULL) {
 }
 
 #' @export
-clean_tracker_cols  <- function(data) {
-  data %>%
-    select(-c("blok", "no_kavling")) %>%
-    rename("Blok/Kavling" = "blok_id")  %>%
-    rename_with(~str_to_title(gsub("_", " ", .)))
-}
-
-#' @export
 generate_data_bukti  <- function(data_main, date, link){
   stopifnot("blok_id" %in% colnames(data_main))
   stopifnot(inherits(date, "Date"))

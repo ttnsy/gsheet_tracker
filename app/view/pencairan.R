@@ -41,6 +41,6 @@ server <- function(id, sheet_id, data_main, data_pencairan_raw, cols_rules) {
     })
 
     input_bukti$server("input", "pencairan", data_main, sheet_id, sheet, cols_rules, trigger)
-    table_bukti$server("table", data_pencairan)
+    table_bukti$server("table", data_pencairan, cols_rules)
   })
 }
