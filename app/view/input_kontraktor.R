@@ -1,11 +1,12 @@
 box::use(
   shiny[...],
   shinyFeedback[...],
-  googlesheets4[sheet_append],
+  googlesheets4[range_write, sheet_append],
   janitor[clean_names],
   dplyr[`%>%`, count, filter, tibble],
   shinyjs[useShinyjs, disabled],
-  reactable[reactable]
+  reactable[reactable],
+  glue[glue]
 )
 
 box::use(
@@ -39,6 +40,11 @@ server <- function(id, blok_id, cols_rules, data, sheet_id) {
         filter(blok_id == blok_id())
     })
 
+    kontr_info  <- reactive({
+      data() %>%
+        count(nama_kontraktor, name = "Jumlah Kavling")
+    })
+
     output$kontr_input_ui  <- renderUI({
       req(data_filtered())
       textInput(
@@ -47,13 +53,6 @@ server <- function(id, blok_id, cols_rules, data, sheet_id) {
         value = data_filtered()$nama_kontraktor
       ) %>%
         disabled()
-    })
-
-    kontr_info  <- reactive({
-      data() %>%
-        clean_names() %>%
-        filter(!is.na(nama_kontraktor)) %>%
-        count(nama_kontraktor, name = "Jumlah Kavling")
     })
 
     observeEvent(input$edit_kontraktor, {
@@ -88,18 +87,43 @@ server <- function(id, blok_id, cols_rules, data, sheet_id) {
       req(blok_id())
       req(input$kontr_edit)
 
-      tibble(
-        nama_kontraktor = input$kontr_edit,
-        blok = strsplit(blok_id(), "[/]")[[1]][1],
-        no_kavling = strsplit(blok_id(), "[/]")[[1]][2],
-      ) %>%
-      rename_sheet_cols(cols_rules, revert=TRUE, rearrange=TRUE)
+      if(blok_id() %in% data()$blok_id){
+        existing  <- data()
+        index  <- which(existing$blok_id == blok_id())
+        range <- glue("A{index+1}")
+        list(
+          range = range,
+          data = data.frame(nama_kontraktor = input$kontr_edit)
+        )
+      } else {
+        tibble(
+          nama_kontraktor = input$kontr_edit,
+          blok = strsplit(blok_id(), "[/]")[[1]][1],
+          no_kavling = as.integer(strsplit(blok_id(), "[/]")[[1]][2]),
+        ) %>%
+        rename_sheet_cols(cols_rules, revert=TRUE, rearrange=TRUE)
+      }
     })
 
     observeEvent(out(), {
       req(out())
       dat <- out()
-      sheet_append(sheet_id, dat, sheet = "kontraktor")
+      sheet <- "kontraktor"
+
+      if (blok_id() %in% data()$blok_id) {
+        data <- out()$data
+        range <- out()$range
+
+        range_write(
+          sheet_id,
+          data,
+          sheet,
+          range,
+          col_names = FALSE
+        )
+      } else {
+        sheet_append(sheet_id, dat, sheet = sheet)
+      }
       session$userData$kontraktor_trigger(session$userData$kontraktor_trigger()+1)
       removeModal()
     })

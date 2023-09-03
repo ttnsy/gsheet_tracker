@@ -111,7 +111,7 @@ server <- function(id, sheet_id, data) {
         input$blok_id
       }),
       cols_rules = cols_kontraktor,
-      data = data_summary,
+      data = data_kontraktor_raw,
       sheet_id
     )
 
