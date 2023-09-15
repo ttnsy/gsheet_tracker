@@ -1,5 +1,6 @@
 box::use(
   shiny[...],
+  shinyvalidate[...],
   dplyr[`%>%`, select, mutate],
   glue[glue],
   stringr[str_to_title],
@@ -23,6 +24,7 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, t
   moduleServer(id, function(input, output, session) {
     ns  <- session$ns
 
+    iv  <- InputValidator$new()
     label_bttn  <- glue("Tambah bukti {label}")
     label_date  <- glue("Tanggal {label}:")
     label_bukti  <- glue("Bukti {label}:")
@@ -87,11 +89,23 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, t
       }
     })
 
-    out <- eventReactive(input$submit, {
-      if (input$url != "") {
-        link  <- input$url
+    iv$add_rule("url", function(url) {
+      pattern <- "^(https?://)?(www\\.)?drive\\.google\\.com/.*$"
+      is_gdrive_url  <- grepl(pattern, url, ignore.case = TRUE)
+
+      if (!is_gdrive_url) {
+        "Not a google drive URL."
       }
-      if (!is.null(input$upload)) {
+    })
+
+    out <- eventReactive(input$submit, {
+      if (input$upload_opt == "url") {
+        if (iv$is_valid()) {
+          link  <- input$url
+        } else {
+          iv$enable()
+        }
+      } else {
         res  <- drive_upload(
           path = "pk-tracker_sample",
           media = input$upload$datapath,
@@ -100,11 +114,10 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, t
         link  <- res$id
         link <- glue("https://drive.google.com/file/d/{res$id}")
       }
-      return(
-        list(
-          date = input$date,
-          link = link
-        )
+      req(exists("link"))
+      list(
+        date = input$date,
+        link = link
       )
     })
 

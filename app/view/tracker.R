@@ -124,18 +124,20 @@ server <- function(id, sheet_id, data) {
       sheet_id
     )
 
-    output$bukti_ui_konstruksi  <- renderUI({
-      if(input_kontraktor_val() == ""){
-          div(
-            class = "bukti_ui_message",
-            icon("table", "fa-5x"),
-            h5(
-              "Input nama kontraktor untuk memulai."
+    observeEvent(input_kontraktor_val(), {
+      output$bukti_ui_konstruksi  <- renderUI({
+        if (input_kontraktor_val() == "") {
+            div(
+              class = "bukti_ui_message",
+              icon("table", "fa-5x"),
+              h5(
+                "Input nama kontraktor untuk memulai."
+              )
             )
-          )
-      } else {
-        bukti$ui(ns("konstruksi"))
-      }
+        } else {
+          bukti$ui(ns("konstruksi"))
+        }
+      })
     })
 
     bukti$server(
