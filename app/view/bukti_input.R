@@ -46,24 +46,16 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, t
               ns("date"),
               label = label_date
             ),
-            span(label_bukti, class = "label-modal"),
-            tabsetPanel(
-              tabPanel(
-                "Google Drive URL",
-                textInput(
-                  ns("url"),
-                  label = ""
-                )
-              ),
-              tabPanel(
-                "Upload Image",
-                fileInput(
-                  ns("upload"),
-                  label = "",
-                  accept = "image/*"
-                  )
-                )
+            radioButtons(
+              ns("upload_opt"),
+              label = label_bukti,
+              inline = TRUE,
+              c(
+                "Google Drive URL" = "url",
+                "Upload from computer" = "upload"
               )
+            ),
+            uiOutput(ns("upload_input_ui"))
           ),
           footer = list(
             modalButton("Cancel"),
@@ -76,6 +68,23 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, t
           )
         )
       )
+    })
+
+    output$upload_input_ui  <- renderUI({
+      req(input$upload_opt)
+      if (input$upload_opt == "url") {
+        textInput(
+          ns("url"),
+          label = NULL,
+          placeholder = "Paste URL here"
+        )
+      } else {
+        fileInput(
+          ns("upload"),
+          label = NULL,
+          accept = "image/*"
+        )
+      }
     })
 
     out <- eventReactive(input$submit, {
