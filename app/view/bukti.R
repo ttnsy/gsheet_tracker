@@ -13,7 +13,8 @@ box::use(
 #' @export
 ui <- function(id) {
   ns <- NS(id)
-  tagList(
+  div(
+    class = "container-bukti",
     bukti_input$ui(ns("input")),
     bukti_table$ui(ns("table"))
   )

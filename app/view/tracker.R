@@ -29,7 +29,7 @@ ui <- function(id) {
       uiOutput(ns("blok_id_ui")),
       bukti$ui(ns("pencairan")),
       input_kontraktor$ui(ns("input_kontraktor")),
-      bukti$ui(ns("konstruksi"))
+      uiOutput(ns("bukti_ui_konstruksi"))
     )
   )
 }
@@ -104,16 +104,6 @@ server <- function(id, sheet_id, data) {
       cols_rules = cols_summary
     )
 
-    input_kontraktor$server(
-      "input_kontraktor",
-      blok_id = reactive({
-        input$blok_id
-      }),
-      cols_rules = cols_kontraktor,
-      data = data_kontraktor_raw,
-      sheet_id
-    )
-
     bukti$server(
       "pencairan",
       sheet_id,
@@ -123,6 +113,30 @@ server <- function(id, sheet_id, data) {
       data = data_pencairan_raw,
       cols_rules = cols_pencairan
     )
+
+    input_kontraktor_val <- input_kontraktor$server(
+      "input_kontraktor",
+      blok_id = reactive({
+        input$blok_id
+      }),
+      cols_rules = cols_kontraktor,
+      data = data_kontraktor_raw,
+      sheet_id
+    )
+
+    output$bukti_ui_konstruksi  <- renderUI({
+      if(input_kontraktor_val() == ""){
+          div(
+            class = "bukti_ui_message",
+            icon("table", "fa-5x"),
+            h5(
+              "Input nama kontraktor untuk memulai."
+            )
+          )
+      } else {
+        bukti$ui(ns("konstruksi"))
+      }
+    })
 
     bukti$server(
       "konstruksi",

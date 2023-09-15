@@ -127,5 +127,9 @@ server <- function(id, blok_id, cols_rules, data, sheet_id) {
       session$userData$kontraktor_trigger(session$userData$kontraktor_trigger()+1)
       removeModal()
     })
+
+    return(
+      reactive({input$kontraktor})
+    )
   })
 }

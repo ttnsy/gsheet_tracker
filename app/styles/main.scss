@@ -65,6 +65,12 @@ img {
     font-weight: 700;
 }
 
+.container-bukti {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
 .container-input-kontraktor {
     display: flex;
     gap: 1em;
@@ -75,5 +81,14 @@ img {
         align-self: center;
         height: 34px;
         margin-top: 10px;
+    }
+}
+
+.bukti_ui_message {
+    text-align: center;
+    opacity: 0.7;
+
+    h5 {
+        font-weight: bold;
     }
 }
