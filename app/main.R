@@ -57,18 +57,29 @@ server <- function(id) {
     session$userData$konstruksi_trigger <- reactiveVal(0)
     session$userData$kontraktor_trigger  <- reactiveVal(0)
 
+    #' columns
+    data_cols  <- config::get(file = "data_cols.yml")
+
     spr_data <- reactive({
       session$userData$spr_trigger()
-      read_tracker(sheet_id, sheet_name = "spr")
+
+      read_tracker(
+        sheet_id,
+        sheet_name = "spr",
+        cols_rules = data_cols[["spr"]]
+      ) %>%
+        group_by(blok_id) %>%
+        slice(which.max(timestamp)) %>%
+        ungroup()
     })
 
     spr_data_process  <- reactive({
       req(spr_data())
       spr_data() %>%
-        filter(Status == "Process")
+        filter(status == "Process")
     })
 
-    spr$server("spr", sheet_id, spr_data)
+    spr$server("spr", sheet_id, spr_data, cols_rules = data_cols[["spr"]])
     # tracker$server("tracker", sheet_id, data = spr_data_process)
   })
 }

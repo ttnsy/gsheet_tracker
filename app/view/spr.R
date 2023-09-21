@@ -1,7 +1,7 @@
 box::use(
   shiny[...],
   shinyFeedback[showToast],
-  googlesheets4[range_write],
+  googlesheets4[sheet_append],
   reactable[...],
   crosstalk[...],
   dplyr[...],
@@ -10,7 +10,7 @@ box::use(
 )
 
 box::use(
-  app/logic/utils_tracker[read_tracker]
+  app/logic/utils_tracker[rename_sheet_cols]
 )
 
 js <- "
@@ -32,27 +32,29 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id, sheet_id, spr_data) {
+server <- function(id, sheet_id, spr_data, cols_rules) {
   moduleServer(id, function(input, output, session) {
     ns  <- session$ns
 
     spr_clean <- reactive({
       req(spr_data())
+
       spr_data() %>%
         select(-c("blok_id"))  %>%
         mutate(
-          `Bukti Booking Fee` = as.character(
-          a("Gdrive Link", href = `Bukti Booking Fee`, target = "_blank")
+          bukti_booking_fee = as.character(
+          a("Gdrive Link", href = bukti_booking_fee, target = "_blank")
         )
       ) %>%
-      select(Timestamp, Status, everything())
+      select(timestamp, status, everything()) %>%
+      rename_sheet_cols(cols_rules, revert=TRUE)
     })
 
     spr_shared <- SharedData$new(spr_clean)
 
     output$spr_filter <- renderUI({
       filter_checkbox(
-        "Status",
+        "status",
         "Status",
         spr_shared,
         ~ Status
@@ -110,23 +112,27 @@ server <- function(id, sheet_id, spr_data) {
       )
     })
 
-    col_state <- reactive({
-      getReactableState("spr", "selected")
+    col_state <- reactive({getReactableState("spr", "selected")})
+
+    to_edit <- reactive({
+      req(col_state())
+      data <- spr_data()
+
+      data[col_state(), ]
     })
 
     observeEvent(col_state(), {
-      data <- spr_clean()
-      to_edit <- data[col_state(), ]
+      dat <- to_edit()
 
       showModal(
         modalDialog(
           class = "modal-edit",
-          title = glue("{to_edit$Nama} ({to_edit$Blok}/{to_edit$`Nomor Kavling`})"),
+          title = glue("{dat$nama} ({dat$blok}/{dat$no_kavling})"),
           selectInput(
             ns("status"),
             "Status",
             choices = c("Cancel", "Process", "Reject"),
-            selected = to_edit$Status
+            selected = dat$status
           ),
           footer = list(
             modalButton("Cancel"),
@@ -143,14 +149,16 @@ server <- function(id, sheet_id, spr_data) {
 
     observeEvent(input$submit, {
       req(input$status)
-      range  <- glue("X{col_state()+1}")
-      range_write(
-        sheet_id,
-        data = data.frame(Status = input$status),
-        sheet = "spr",
-        range = range,
-        col_names = FALSE
-      )
+
+      dat <- to_edit() %>%
+        select(-blok_id) %>%
+        mutate(
+          timestamp = Sys.time(),
+          status = input$status
+        ) %>%
+      rename_sheet_cols(cols_rules, revert=TRUE)
+
+      sheet_append(sheet_id, dat, sheet = "spr")
       removeModal()
       session$userData$spr_trigger(session$userData$spr_trigger() + 1)
       showToast("success", "Success updating status.")
