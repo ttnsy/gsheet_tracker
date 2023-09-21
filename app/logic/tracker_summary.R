@@ -21,7 +21,7 @@ get_summary  <- function(pencairan, konstruksi, kontraktor) {
     left_join(kontraktor) %>%
     mutate(
       termin_avail = ifelse(nama_kontraktor == "Asep", jml_pencairan * 3, jml_pencairan * 1),
-      termin_avail = pmin(termin_avail, 5)
+      termin_avail = pmin(termin_avail, 9)
     ) %>%
     left_join(done_termin)
 }

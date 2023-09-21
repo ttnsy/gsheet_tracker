@@ -1,10 +1,12 @@
 box::use(
-  shiny[navbarPage, tabPanel, moduleServer, NS, renderText, tags, reactive, req, reactiveVal],
+  shiny[bootstrapPage, moduleServer, NS, renderText, tags, reactive, req, reactiveVal],
+  shiny.router[router_ui, router_server, route, route_link],
   googlesheets4[...],
   googledrive[drive_auth],
   glue[glue],
   dplyr[...],
-  config[get]
+  config[get],
+  reactable[reactableTheme]
 )
 
 box::use(
@@ -17,18 +19,22 @@ box::use(
 ui <- function(id) {
   ns <- NS(id)
 
-  navbarPage(
+  bootstrapPage(
     title = "Tracker Sample",
-    tabPanel(
-      "Tabel SPR",
-      spr$ui(ns("spr"))
+    tags$nav(
+      class = "navbar",
+      tags$ul(
+        tags$li(
+          tags$a(class = "nav-link", "Tabel SPR", href = route_link("spr"))
+        ),
+        tags$li(
+          tags$a(class = "nav-link", "Tracker", href = route_link("tracker"))
+        )
+      )
     ),
-    tabPanel(
-      "Tracker",
-      tracker$ui(ns("tracker"))
-    ),
-    tabPanel(
-      "Kontraktor"
+    router_ui(
+      route("spr", spr$ui(ns("spr"))),
+      route("tracker", tracker$ui(ns("tracker")))
     )
   )
 }
@@ -36,6 +42,8 @@ ui <- function(id) {
 #' @export
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
+    router_server("spr")
+
     google_mail <- Sys.getenv("GOOGLE_MAIL")
     google_sheet_url  <- Sys.getenv("GOOGLE_SHEET_URL")
 
@@ -61,6 +69,6 @@ server <- function(id) {
     })
 
     spr$server("spr", sheet_id, spr_data)
-    tracker$server("tracker", sheet_id, data = spr_data_process)
+    # tracker$server("tracker", sheet_id, data = spr_data_process)
   })
 }

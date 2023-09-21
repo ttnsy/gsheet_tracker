@@ -95,7 +95,7 @@ server <- function(id, sheet_id, data) {
         filter(blok_id == input$blok_id)
     })
 
-    data_summary <- table_summary$server(
+    table_summary$server(
       "table_summary",
       data_main,
       data_pencairan_raw,

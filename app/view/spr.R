@@ -44,7 +44,8 @@ server <- function(id, sheet_id, spr_data) {
           `Bukti Booking Fee` = as.character(
           a("Gdrive Link", href = `Bukti Booking Fee`, target = "_blank")
         )
-      )
+      ) %>%
+      select(Timestamp, Status, everything())
     })
 
     spr_shared <- SharedData$new(spr_clean)
@@ -53,17 +54,23 @@ server <- function(id, sheet_id, spr_data) {
       filter_checkbox(
         "Status",
         "Status",
-        inline = TRUE,
         spr_shared,
         ~ Status
       )
     })
 
     output$spr <- renderReactable({
+      sticky_style  <- list(backgroundColor = "#f7f7f7")
+
       reactable(
         spr_shared,
-        wrap = TRUE,
+        class = "tbl-spr",
         searchable = TRUE,
+        bordered = TRUE,
+        wrap = FALSE,
+        resizable = TRUE,
+        defaultPageSize = 15,
+        minRows = 1,
         selection = "single",
         onClick = "select",
         rowStyle = JS("function(rowInfo) {
@@ -72,7 +79,13 @@ server <- function(id, sheet_id, spr_data) {
           }
         }"),
         columns = list(
+          Timestamp = colDef(
+            sticky = "left",
+            style = sticky_style,
+            headerStyle = sticky_style
+          ),
           Status = colDef(
+            sticky = "left",
             style = function(value) {
               if (value == "Process") {
                 color <- "#008000"
@@ -81,8 +94,13 @@ server <- function(id, sheet_id, spr_data) {
               } else {
                 color  <- "#777"
               }
-              list(color = color, fontWeight = "bold")
+              list(
+                backgroundColor = "#f7f7f7",
+                color = color,
+                fontWeight = "bold"
+              )
             },
+            headerStyle = sticky_style,
             align = "center"
           ),
           `Bukti Booking Fee` = colDef(
