@@ -120,14 +120,13 @@ server <- function(id, sheet_id, spr_data) {
 
       showModal(
         modalDialog(
-          div(
-            class = "modal-edit",
-            selectInput(
-              ns("status"),
-              "Status",
-              choices = c("Cancel", "Process", "Reject"),
-              selected = to_edit$Status
-            )
+          class = "modal-edit",
+          title = glue("{to_edit$Nama} ({to_edit$Blok}/{to_edit$`Nomor Kavling`})"),
+          selectInput(
+            ns("status"),
+            "Status",
+            choices = c("Cancel", "Process", "Reject"),
+            selected = to_edit$Status
           ),
           footer = list(
             modalButton("Cancel"),
