@@ -1,6 +1,6 @@
 box::use(
   dplyr[`%>%`, select, mutate],
-  reactable[colDef, reactable, renderReactable, reactableOutput],
+  reactable[colDef, colFormat, reactable, renderReactable, reactableOutput],
   shiny[...],
   rlang[...]
 )
@@ -24,7 +24,7 @@ server <- function(id, data, cols_rules) {
       req(data())
 
       dat <- data() %>%
-        select(-c("blok", "no_kavling")) %>%
+        select(date, link) %>%
         mutate(
           link = glue::glue('<a href="{link}" target="_blank">Gdrive Link</a>')
         )
@@ -32,15 +32,21 @@ server <- function(id, data, cols_rules) {
 
       dat <- dat %>%
         select(-link) %>%
-        rename_sheet_cols(cols_rules, revert=TRUE, rearrange=TRUE) %>%
         cbind(link)
 
       reactable(
         dat,
         columns = list(
+          date = colDef(
+            name = "",
+            rowHeader = TRUE,
+            format = colFormat(datetime = TRUE),
+            style = list(fontWeight = 600)
+          ),
           link = colDef(
             name = names(cols_rules[cols_rules == "link"]),
-            html = TRUE
+            html = TRUE,
+            align = "center"
           )
         )
       )

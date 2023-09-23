@@ -25,7 +25,7 @@ ui <- function(id) {
       class = "navbar",
       tags$ul(
         tags$li(
-          tags$a(class = "nav-link", "Tabel SPR", href = route_link("spr"))
+          tags$a(class = "nav-link", "Tabel SPR", href = route_link("/"))
         ),
         tags$li(
           tags$a(class = "nav-link", "Tracker", href = route_link("tracker"))
@@ -33,7 +33,7 @@ ui <- function(id) {
       )
     ),
     router_ui(
-      route("spr", spr$ui(ns("spr"))),
+      route("/", spr$ui(ns("spr"))),
       route("tracker", tracker$ui(ns("tracker")))
     )
   )
@@ -42,7 +42,7 @@ ui <- function(id) {
 #' @export
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
-    router_server("spr")
+    router_server("/")
 
     google_mail <- Sys.getenv("GOOGLE_MAIL")
     google_sheet_url  <- Sys.getenv("GOOGLE_SHEET_URL")
@@ -80,6 +80,6 @@ server <- function(id) {
     })
 
     spr$server("spr", sheet_id, spr_data, cols_rules = data_cols[["spr"]])
-    # tracker$server("tracker", sheet_id, data = spr_data_process)
+    tracker$server("tracker", sheet_id, data = spr_data_process, data_cols)
   })
 }

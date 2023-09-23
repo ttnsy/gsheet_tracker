@@ -11,10 +11,11 @@ box::use(
 )
 
 #' @export
-ui <- function(id) {
+ui <- function(id, title) {
   ns <- NS(id)
   div(
-    class = "container-bukti",
+    class = "card",
+    h3(title),
     bukti_input$ui(ns("input")),
     bukti_table$ui(ns("table"))
   )

@@ -77,17 +77,86 @@ img {
   padding: 1em;
 }
 
-.btn-add {
-  color: #fff;
-  width: 30%;
-  align-self: center;
-  background-color: #5cb85c;
-  border-radius: 4px;
-}
-
 .container-tracker {
   display: flex;
-  gap: 3rem;
+  gap: 2rem;
+}
+
+.tracker-contents {
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
+}
+
+.info {
+  display: flex;
+  gap: 3em;
+}
+
+#app-tracker-info {
+  display: flex;
+  width: 300px;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8em;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 1em;
+}
+
+.info-contents {
+  text-align: center;
+
+  .title {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .text {
+    margin-top: 0.8em;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+  border: 1px solid gray;
+  border-radius: 8px;
+  overflow: hidden;
+
+  h3 {
+    color: gray;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    width: 345px;
+    border-bottom: 2px solid gray;
+    padding: 0.8em;
+  }
+}
+
+#app-tracker-pencairan-input-bttn_add_ui {
+  text-align: center;
+}
+
+.btn-add {
+  color: #fff;
+  width: 20%;
+  align-self: center;
+  background-color: $light-blue;
+  border-radius: 4px;
+
+  &:hover {
+    color: $light-blue;
+    background-color: white;
+    border: 1.2px solid $light-blue;
+  }
+
+  &:active, &:focus {
+    transform: scale(0.98);
+    background-color: $blue;
+    color: white;
+  }
 }
 
 .tracker-kavling {

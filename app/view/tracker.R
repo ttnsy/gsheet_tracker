@@ -9,44 +9,61 @@ box::use(
 
 box::use(
   app/logic/utils_tracker[...],
-  app/logic/tracker_summary[...],
   app/view/bukti,
-  app/view/input_kontraktor,
-  app/view/table_summary
+  app/view/input_kontraktor
 )
 
 #' @export
 ui <- function(id) {
   ns <- NS(id)
-  div(
-    class = "container-tracker",
+  tagList(
     div(
-      class = "tracker-summary",
-      table_summary$ui(ns("table_summary")),
-    ),
-    div(
-      class = "tracker-kavling",
-      uiOutput(ns("blok_id_ui")),
-      bukti$ui(ns("pencairan")),
-      input_kontraktor$ui(ns("input_kontraktor")),
-      uiOutput(ns("bukti_ui_konstruksi"))
+      class = "container-tracker",
+      div(
+        class = "sidebar-tracker",
+        uiOutput(ns("blok_id_ui")),
+        uiOutput(ns("info"))
+      ),
+      div(
+        class = "tracker-contents",
+        fluidRow(
+          bukti$ui(ns("pencairan"), title = "Pencairan Bank")
+        ),
+        fluidRow(
+          input_kontraktor$ui(ns("input_kontraktor")),
+          uiOutput(ns("bukti_ui_konstruksi"))
+        )
+      )
     )
   )
 }
 
 #' @export
-server <- function(id, sheet_id, data) {
+server <- function(id, sheet_id, data, data_cols) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    data_cols  <- config::get(file = "data_cols.yml")
+
+    output$info  <- renderUI({
+      req(data_main_filtered())
+
+      dat <- data_main_filtered()
+      tagList(
+        icon("home-user", "fa-3x"),
+        div(
+          class = "info-contents",
+          p(class = "title", glue("{dat$nama}")),
+          p(class = "subtitle", glue("{dat$blok_id}")),
+          p(class = "text", "Sistem Pembayaran:", glue("{dat$sistem_pembayaran}"))
+        )
+      )
+    })
+
     cols_pencairan  <- data_cols[["pencairan"]]
     cols_konstruksi  <- data_cols[["konstruksi"]]
     cols_kontraktor  <- data_cols[["kontraktor"]]
-    cols_summary  <- data_cols[["summary"]]
 
     data_main  <- reactive({
       data() %>%
-        rename_sheet_cols(data_cols[["spr"]]) %>%
         select(
           nama,
           blok_id,
@@ -82,7 +99,7 @@ server <- function(id, sheet_id, data) {
     })
 
     output$blok_id_ui  <- renderUI({
-        selectInput(
+      selectInput(
         ns("blok_id"),
         "Pilih Blok/Kavling:",
         choices = sort(data()$blok_id)
@@ -94,15 +111,6 @@ server <- function(id, sheet_id, data) {
       data_main() %>%
         filter(blok_id == input$blok_id)
     })
-
-    table_summary$server(
-      "table_summary",
-      data_main,
-      data_pencairan_raw,
-      data_konstruksi_raw,
-      data_kontraktor_raw,
-      cols_rules = cols_summary
-    )
 
     bukti$server(
       "pencairan",
@@ -135,7 +143,7 @@ server <- function(id, sheet_id, data) {
               )
             )
         } else {
-          bukti$ui(ns("konstruksi"))
+          bukti$ui(ns("konstruksi"), title = "Pembayaran Kontraktor")
         }
       })
     })

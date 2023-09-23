@@ -1,24 +1,13 @@
-$(document).ready(function() {
-    // Function to highlight the active page
-    function highlightActiveLink() {
-        let currentURL = window.location.href;
+$(document).ready(function(){
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach((item) => {
+        if(item.href === window.location.href) {
+          item.classList.add('active')
+        }
+    });
 
-        // Iterate over each nav link
-        $('.nav-link').each(function() {
-            if (this.href === currentURL) {
-                $(this).addClass('active');
-            } else {
-                $(this).removeClass('active');
-            }
-        });
-    }
-    
-    // Highlight the appropriate nav link when the page first loads
-    highlightActiveLink();
-
-    // Update the highlight when a nav link is clicked
-    $('.nav-link').on('click', function(event) {
-        $('.nav-link').removeClass('active');
-        $(this).addClass('active');
+    $('.nav-link').click(function(){
+      $('.nav-link').removeClass("active");
+      $(this).addClass("active");
     });
 });

@@ -32,10 +32,10 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, t
     output$bttn_add_ui  <- renderUI({
       actionButton(
         ns("bttn_add"),
-        label_bttn,
+        "",
+        title = label_bttn,
         class = "btn-add",
-        icon = icon("plus"),
-        width = "40%"
+        icon = icon("plus", "fa-lg")
       )
     })
 
