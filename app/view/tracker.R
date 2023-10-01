@@ -61,6 +61,7 @@ server <- function(id, sheet_id, data, data_cols) {
     cols_pencairan  <- data_cols[["pencairan"]]
     cols_konstruksi  <- data_cols[["konstruksi"]]
     cols_kontraktor  <- data_cols[["kontraktor"]]
+    cols_kontraktor_progress  <- data_cols[["kontraktor_progress"]]
 
     data_main  <- reactive({
       data() %>%
@@ -86,6 +87,15 @@ server <- function(id, sheet_id, data, data_cols) {
         sheet_id,
         "konstruksi",
         cols_rules = cols_konstruksi
+      )
+    })
+
+    data_kontr_progress_raw  <- reactive({
+      session$userData$kontr_progress_trigger()
+      read_tracker(
+        sheet_id,
+        "kontraktor_progress",
+        cols_rules = cols_kontraktor_progress
       )
     })
 
@@ -143,10 +153,24 @@ server <- function(id, sheet_id, data, data_cols) {
               )
             )
         } else {
-          bukti$ui(ns("konstruksi"), title = "Pembayaran Kontraktor")
+          div(
+            class = "container-kontr",
+            bukti$ui(ns("kontr_progress"), title = "Progress Kontraktor"),
+            bukti$ui(ns("konstruksi"), title = "Pembayaran Kontraktor")
+          )
         }
       })
     })
+
+    bukti$server(
+      "kontr_progress",
+      sheet_id,
+      sheet = "kontraktor_progress",
+      trigger = session$userData$kontr_progress_trigger,
+      data_main = data_main_filtered,
+      data = data_kontr_progress_raw,
+      cols_rules = cols_kontraktor_progress
+    )
 
     bukti$server(
       "konstruksi",

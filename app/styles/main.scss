@@ -116,21 +116,27 @@ img {
   }
 }
 
+.container-kontr {
+  display: flex;
+  gap: 2em;
+}
+
 .card {
   display: flex;
   flex-direction: column;
   gap: 0.8em;
-  border: 1px solid gray;
+  width: 365px;
+  border: 1px solid black;
   border-radius: 8px;
   overflow: hidden;
 
   h3 {
-    color: gray;
+    color: black;
     font-size: 14px;
     text-transform: uppercase;
     font-weight: bold;
     width: 345px;
-    border-bottom: 2px solid gray;
+    border-bottom: 2px solid black;
     padding: 0.8em;
   }
 }

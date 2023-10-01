@@ -55,6 +55,7 @@ server <- function(id) {
     session$userData$spr_trigger  <- reactiveVal(0)
     session$userData$pencairan_trigger <- reactiveVal(0)
     session$userData$konstruksi_trigger <- reactiveVal(0)
+    session$userData$kontr_progress_trigger  <- reactiveVal(0)
     session$userData$kontraktor_trigger  <- reactiveVal(0)
 
     #' columns

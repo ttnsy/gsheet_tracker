@@ -45,6 +45,12 @@ default:
     Blok/ Kavling: blok_id
     Blok: blok
     Nomor Kavling: no_kavling
+  kontraktor_progress:
+    Nama: nama
+    Blok: blok
+    Nomor Kavling: no_kavling
+    Tanggal Progress: date
+    Bukti Progress: link
   summary:
     Nama: nama
     Blok/ Kavling: blok_id
