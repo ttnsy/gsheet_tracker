@@ -31,7 +31,7 @@ bukti_button_item <- function(url, value1=NULL, value2=NULL) {
       text
     )
   )
-} 
+}
 
 #' @export
 done_to_target_perc <- function(data, show_ratio=TRUE) {

@@ -16,7 +16,7 @@ box::use(
 #' @export
 ui <- function(id) {
   ns <- NS(id)
-  uiOutput(ns("bttn_add_ui"))
+  uiOutput(ns("btn_add_ui"))
 }
 
 #' @export
@@ -25,21 +25,20 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, t
     ns  <- session$ns
 
     iv  <- InputValidator$new()
-    label_bttn  <- glue("Tambah bukti {label}")
+    label_btn  <- glue("Tambah bukti {label}")
     label_date  <- glue("Tanggal {label}:")
     label_bukti  <- glue("Bukti {label}:")
 
-    output$bttn_add_ui  <- renderUI({
+    output$btn_add_ui  <- renderUI({
       actionButton(
-        ns("bttn_add"),
-        "",
-        title = label_bttn,
-        class = "btn-add",
-        icon = icon("plus", "fa-lg")
+        ns("btn_add"),
+        "Tambah bukti",
+        title = label_btn,
+        icon = icon("square-plus", "fa-reguler fa-2xl")
       )
     })
 
-    observeEvent(input$bttn_add, {
+    observeEvent(input$btn_add, {
       showModal(
         modalDialog(
           div(
