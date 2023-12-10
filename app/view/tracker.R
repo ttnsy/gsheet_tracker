@@ -21,8 +21,12 @@ ui <- function(id) {
     uiOutput(ns("blok_id_ui")),
     div(
       class = "container-tracker",
-      card_info$ui(ns("card_info"))
-    )
+      card_info$ui(ns("card_info")),
+      div(
+        class = "card",
+        bukti$ui(ns("pencairan"))
+      )
+    ),
     # div(
     #   class = "tracker-contents",
     #   fluidRow(
@@ -113,6 +117,7 @@ server <- function(id, sheet_id, data, data_cols) {
 
     bukti$server(
       "pencairan",
+      title = "Bukti Pencairan Bank",
       sheet_id,
       sheet = "pencairan",
       trigger = session$userData$pencairan_trigger,
@@ -131,44 +136,44 @@ server <- function(id, sheet_id, data, data_cols) {
       sheet_id
     )
 
-    observeEvent(input_kontraktor_val(), {
-      output$bukti_ui_konstruksi  <- renderUI({
-        if (input_kontraktor_val() == "") {
-            div(
-              class = "bukti_ui_message",
-              icon("table", "fa-5x"),
-              h5(
-                "Input nama kontraktor untuk memulai."
-              )
-            )
-        } else {
-          div(
-            class = "container-kontr",
-            bukti$ui(ns("kontr_progress"), title = "Progress Kontraktor"),
-            bukti$ui(ns("konstruksi"), title = "Pembayaran Kontraktor")
-          )
-        }
-      })
-    })
+    # observeEvent(input_kontraktor_val(), {
+    #   output$bukti_ui_konstruksi  <- renderUI({
+    #     if (input_kontraktor_val() == "") {
+    #         div(
+    #           class = "bukti_ui_message",
+    #           icon("table", "fa-5x"),
+    #           h5(
+    #             "Input nama kontraktor untuk memulai."
+    #           )
+    #         )
+    #     } else {
+    #       div(
+    #         class = "container-kontr",
+    #         bukti$ui(ns("kontr_progress"), title = "Progress Kontraktor"),
+    #         bukti$ui(ns("konstruksi"), title = "Pembayaran Kontraktor")
+    #       )
+    #     }
+    #   })
+    # })
 
-    bukti$server(
-      "kontr_progress",
-      sheet_id,
-      sheet = "kontraktor_progress",
-      trigger = session$userData$kontr_progress_trigger,
-      data_main = data_main_filtered,
-      data = data_kontr_progress_raw,
-      cols_rules = cols_kontraktor_progress
-    )
+    # bukti$server(
+    #   "kontr_progress",
+    #   sheet_id,
+    #   sheet = "kontraktor_progress",
+    #   trigger = session$userData$kontr_progress_trigger,
+    #   data_main = data_main_filtered,
+    #   data = data_kontr_progress_raw,
+    #   cols_rules = cols_kontraktor_progress
+    # )
 
-    bukti$server(
-      "konstruksi",
-      sheet_id,
-      sheet = "konstruksi",
-      trigger = session$userData$konstruksi_trigger,
-      data_main = data_main_filtered,
-      data = data_konstruksi_raw,
-      cols_rules = cols_konstruksi
-    )
+    # bukti$server(
+    #   "konstruksi",
+    #   sheet_id,
+    #   sheet = "konstruksi",
+    #   trigger = session$userData$konstruksi_trigger,
+    #   data_main = data_main_filtered,
+    #   data = data_konstruksi_raw,
+    #   cols_rules = cols_konstruksi
+    # )
   })
 }

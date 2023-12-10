@@ -132,39 +132,57 @@ img {
   }
 }
 
-.container-kontr {
-  display: flex;
-  gap: 2em;
-}
-
-.btn-add {
-  color: #fff;
-  width: 20%;
-  align-self: center;
-  background-color: $light-blue;
-  border-radius: 4px;
-
-  &:hover {
-    color: $light-blue;
-    background-color: white;
-    border: 1.2px solid $light-blue;
+.bukti {
+  .far {
+    line-height: 0;
+    align-self: center;
   }
 
-  &:active, &:focus {
-    transform: scale(0.98);
-    background-color: $blue;
-    color: white;
+  &__title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 12px;
   }
-}
 
-.tracker-kavling {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5em;
-  border-radius: 1em;
-  padding: 2em;
-  width: 100%;
-  background: $wheat;
+  &__subtitle {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  &__items > *:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25em;
+  }
+
+  &__button {
+    display: flex;
+    padding: 14px;
+    border: 1.5px solid #A6A6A6;
+    border-radius: 8px;
+    gap: 1em;
+    background-color: #fff;
+    width: 100%;
+    text-align: left;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
+    &--dark {
+      font-size: 16px;
+      font-weight: 600;
+      color: #252F40;
+    }
+    
+    &--light {
+      font-size: 14px;
+      font-weight: 600;
+      color: #67748E;
+    }
+  }
 }
 
 .label-modal {
@@ -172,12 +190,6 @@ img {
   max-width: 100%;
   margin-bottom: 5px;
   font-weight: 700;
-}
-
-.container-bukti {
-  display: flex;
-  flex-direction: column;
-  gap: 2em;
 }
 
 .container-input-kontraktor {
