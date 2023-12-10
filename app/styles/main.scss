@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400;1,600,700,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
 
 $grey: #a9a9a9;
 $wheat: #e0d8bc;
@@ -7,10 +7,12 @@ $light-blue: #6da6b1;
 $green: #638129;
 $dark-green: #29461a;
 
+$font-main: 'Open Sans', sans-serif;
+
 // CSS Reset
 html {
   box-sizing: border-box;
-  font-size: 16px;
+  font-size: 14px;
 }
   
 *, *:before, *:after {
@@ -18,13 +20,11 @@ html {
 }
 
 body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+  font-family: $font-main;
+  height: 100%;
   margin: 0;
   padding: 0;
   font-weight: normal;
-}
-
-* {
-  font-family: 'Open Sans', sans-serif;
 }
 
 ol, ul {
@@ -32,6 +32,10 @@ ol, ul {
 }
 
 // MAIN
+.router {
+  padding: 0.5em 1em;
+}
+
 .form-group {
   .control-label {
     font-size: 12px;
@@ -52,7 +56,8 @@ ol, ul {
 
 .navbar {
   padding: 1em;
-  
+  margin-bottom: 0;
+
   li {
     float: left;
     a {
@@ -105,9 +110,9 @@ img {
   display: flex;
   flex-direction: column;
   gap: 0.8em;
-  width: 18rem;
-  box-shadow: 0px 6px 12px 0 rgba(0,0,0,.10);
-  border-radius: 16px;
+  min-width: 20rem;
+  box-shadow: 0px 20px 27px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
   overflow: hidden;
   padding: 1.25em 1.5em;
 }
@@ -148,10 +153,16 @@ img {
     border: 1.5px dashed #a6a6a6;
     border-radius: 8px;
     gap: 1em;
-    background-color: #fff;
+    background-color: #ececec;
     color: #A6A6A6;
     width: 100%;
     text-align: left;
+
+    &:hover {
+      color: #077d6b;
+      border: 2px solid #077d6b;
+      background-color: #fff;
+    }
   }
 
   &__title {
@@ -179,13 +190,28 @@ img {
     background-color: #fff;
     width: 100%;
     text-align: left;
+
+    &:hover {
+      background-color: #077d6b;
+      color: white;
+      border: 1.5px solid #077d6b;
+      transition: all 0.2s ease-out;
+      box-shadow: 0px 4px 8px rgba(38, 38, 38, 0.2);
+      top: -4px;
+
+      * {
+        color: white;
+      }
+    }
+  }
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;  
   }
 
   &__text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
-
     &--dark {
       font-size: 16px;
       font-weight: 600;
