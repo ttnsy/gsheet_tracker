@@ -22,10 +22,7 @@ ui <- function(id) {
   ns <- NS(id)
   div(
     class="card",
-    div(
-      class = "card__content",
-      uiOutput(ns("info_fields"))
-    )
+    uiOutput(ns("info_fields"))
   )
 }
 
