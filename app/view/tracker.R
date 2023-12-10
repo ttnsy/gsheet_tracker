@@ -10,6 +10,7 @@ box::use(
 box::use(
   app/logic/utils_tracker[...],
   app/view/bukti,
+  app/view/card_info,
   app/view/input_kontraktor
 )
 
@@ -17,22 +18,19 @@ box::use(
 ui <- function(id) {
   ns <- NS(id)
   tagList(
+    uiOutput(ns("blok_id_ui")),
     div(
       class = "container-tracker",
-      div(
-        class = "sidebar-tracker",
-        uiOutput(ns("blok_id_ui")),
-        uiOutput(ns("info"))
+      card_info$ui(ns("card_info"))
+    ),
+    div(
+      class = "tracker-contents",
+      fluidRow(
+        bukti$ui(ns("pencairan"), title = "Pencairan Bank")
       ),
-      div(
-        class = "tracker-contents",
-        fluidRow(
-          bukti$ui(ns("pencairan"), title = "Pencairan Bank")
-        ),
-        fluidRow(
-          input_kontraktor$ui(ns("input_kontraktor")),
-          uiOutput(ns("bukti_ui_konstruksi"))
-        )
+      fluidRow(
+        input_kontraktor$ui(ns("input_kontraktor")),
+        uiOutput(ns("bukti_ui_konstruksi"))
       )
     )
   )
@@ -42,21 +40,6 @@ ui <- function(id) {
 server <- function(id, sheet_id, data, data_cols) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
-    output$info  <- renderUI({
-      req(data_main_filtered())
-
-      dat <- data_main_filtered()
-      tagList(
-        icon("home-user", "fa-3x"),
-        div(
-          class = "info-contents",
-          p(class = "title", glue("{dat$nama}")),
-          p(class = "subtitle", glue("{dat$blok_id}")),
-          p(class = "text", "Sistem Pembayaran:", glue("{dat$sistem_pembayaran}"))
-        )
-      )
-    })
 
     cols_pencairan  <- data_cols[["pencairan"]]
     cols_konstruksi  <- data_cols[["konstruksi"]]
@@ -121,6 +104,8 @@ server <- function(id, sheet_id, data, data_cols) {
       data_main() %>%
         filter(blok_id == input$blok_id)
     })
+
+    card_info$server("card_info", data_main_filtered)
 
     bukti$server(
       "pencairan",
