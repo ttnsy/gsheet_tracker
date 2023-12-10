@@ -63,7 +63,7 @@ server <- function(id, title, sheet_id, sheet, trigger, data_main, data, cols_ru
       dat <- bukti_items_data()
 
       items <- tagList()
-      for (i in 1:nrow(dat)) {
+      for (i in seq_len(nrow(dat))) {
         item <- bukti_button_item(
           url = dat$link[i],
           value1 = dat$amount[i],

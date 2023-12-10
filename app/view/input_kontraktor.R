@@ -87,7 +87,7 @@ server <- function(id, blok_id, cols_rules, data, sheet_id) {
       req(blok_id())
       req(input$kontr_edit)
 
-      if(blok_id() %in% data()$blok_id){
+      if (blok_id() %in% data()$blok_id) {
         existing  <- data()
         index  <- which(existing$blok_id == blok_id())
         range <- glue("A{index+1}")
@@ -129,7 +129,9 @@ server <- function(id, blok_id, cols_rules, data, sheet_id) {
     })
 
     return(
-      reactive({input$kontraktor})
+      reactive({
+        input$kontraktor
+      })
     )
   })
 }
