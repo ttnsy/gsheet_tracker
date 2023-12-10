@@ -22,17 +22,17 @@ ui <- function(id) {
     div(
       class = "container-tracker",
       card_info$ui(ns("card_info"))
-    ),
-    div(
-      class = "tracker-contents",
-      fluidRow(
-        bukti$ui(ns("pencairan"), title = "Pencairan Bank")
-      ),
-      fluidRow(
-        input_kontraktor$ui(ns("input_kontraktor")),
-        uiOutput(ns("bukti_ui_konstruksi"))
-      )
     )
+    # div(
+    #   class = "tracker-contents",
+    #   fluidRow(
+    #     bukti$ui(ns("pencairan"), title = "Pencairan Bank")
+    #   ),
+    #   fluidRow(
+    #     input_kontraktor$ui(ns("input_kontraktor")),
+    #     uiOutput(ns("bukti_ui_konstruksi"))
+    #   )
+    # )
   )
 }
 
@@ -41,6 +41,7 @@ server <- function(id, sheet_id, data, data_cols) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
+    cols_spr <- data_cols[["spr"]]
     cols_pencairan  <- data_cols[["pencairan"]]
     cols_konstruksi  <- data_cols[["konstruksi"]]
     cols_kontraktor  <- data_cols[["kontraktor"]]
@@ -51,7 +52,10 @@ server <- function(id, sheet_id, data, data_cols) {
         select(
           nama,
           blok_id,
-          sistem_pembayaran
+          sistem_pembayaran,
+          tipe_dan_lt,
+          harga_tanah_bangunan,
+          disc
         )
     })
 
@@ -105,7 +109,7 @@ server <- function(id, sheet_id, data, data_cols) {
         filter(blok_id == input$blok_id)
     })
 
-    card_info$server("card_info", data_main_filtered)
+    card_info$server("card_info", data_main_filtered, cols_rules = cols_spr)
 
     bukti$server(
       "pencairan",
