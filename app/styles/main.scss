@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400;1,600,700,800&display=swap');
 
 $grey: #a9a9a9;
 $wheat: #e0d8bc;
@@ -24,13 +24,28 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul {
 }
 
 * {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 ol, ul {
   list-style: none;
 }
 
+// MAIN
+.form-group {
+  .control-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+ 
+  .item {
+    letter-spacing: 2px;
+  }
+}
+
+// NAVBAR
 #router-page-wrapper {
   padding: 0 1em;
 }
@@ -60,6 +75,8 @@ ol, ul {
   border-bottom: 2px solid $dark-green;
 }
 
+// SPR
+
 #app-spr-spr {
   width: 85% !important;
 }
@@ -77,72 +94,49 @@ img {
   padding: 1em;
 }
 
+// TRACKER
+
 .container-tracker {
   display: flex;
   gap: 2rem;
-}
-
-.tracker-contents {
-  display: flex;
-  flex-direction: column;
-  gap: 3em;
-}
-
-.info {
-  display: flex;
-  gap: 3em;
-}
-
-#app-tracker-info {
-  display: flex;
-  width: 300px;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.8em;
-  border-bottom: 1px solid lightgray;
-  padding-bottom: 1em;
-}
-
-.info-contents {
-  text-align: center;
-
-  .title {
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-
-  .text {
-    margin-top: 0.8em;
-  }
-}
-
-.container-kontr {
-  display: flex;
-  gap: 2em;
 }
 
 .card {
   display: flex;
   flex-direction: column;
   gap: 0.8em;
-  width: 365px;
-  border: 1px solid black;
-  border-radius: 8px;
+  width: 18rem;
+  box-shadow: 0px 6px 12px 0 rgba(0,0,0,.10);
+  border-radius: 16px;
   overflow: hidden;
+  
+  &__content {
+    padding: 1.25em 1.5em;
+  }
+}
+
+.info-field {
+  label {
+    display: block;
+    color: #A6A6A6;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
 
   h3 {
-    color: black;
+    color: #000;
     font-size: 14px;
-    text-transform: uppercase;
-    font-weight: bold;
-    width: 345px;
-    border-bottom: 2px solid black;
-    padding: 0.8em;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
   }
+}
 
-  .shiny-html-output.shiny-bound-output {
-    text-align: center;
-  }
+.container-kontr {
+  display: flex;
+  gap: 2em;
 }
 
 .btn-add {
