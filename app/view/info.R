@@ -43,7 +43,7 @@ server <- function(id, data_main_filtered, cols_rules) {
       labels <- colnames(data)
 
       texts <- tagList()
-      for (i in 1:ncol(data)) {
+      for (i in seq_len(ncol(data))) {
         text <- generate_info(
           label = labels[i],
           value = data[i]

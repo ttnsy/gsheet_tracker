@@ -32,6 +32,7 @@ default:
     Nomor Kavling: no_kavling
     Tanggal Pencairan: date
     Bukti Pencairan: link
+    Jumlah Pencairan: amount
   konstruksi:
     Nama: nama
     Sistem Pembayaran: sistem_pembayaran
@@ -40,6 +41,7 @@ default:
     Nomor Kavling: no_kavling
     Tanggal Transfer: date
     Bukti Transfer: link
+    Jumlah Transfer: amount
   kontraktor:
     Nama Kontraktor: nama_kontraktor
     Blok/ Kavling: blok_id

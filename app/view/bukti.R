@@ -42,11 +42,14 @@ server <- function(id, title, sheet_id, sheet, trigger, data_main, data, cols_ru
     })
 
     bukti_items_data <- reactive({
-      data_filtered()  %>%
-        select(date, link) %>%
-        mutate(
-          amount = glue("RP. 10,000,000,-")
-        )
+      dat <- data_filtered()
+      cols <- c("date", "link")
+      if ("amount" %in% colnames(dat)) {
+        cols <- append(cols, "amount")
+      }
+
+      dat %>%
+        select(all_of(cols))
     })
 
     output$bukti_header <- renderUI({
@@ -63,14 +66,26 @@ server <- function(id, title, sheet_id, sheet, trigger, data_main, data, cols_ru
       dat <- bukti_items_data()
 
       items <- tagList()
-      for (i in seq_len(nrow(dat))) {
-        item <- bukti_button_item(
-          url = dat$link[i],
-          value1 = dat$amount[i],
-          value2 = dat$date[i]
-        )
-        items <- tagAppendChild(items, item)
+
+      if ("amount" %in% colnames(dat)) {
+        for (i in seq_len(nrow(dat))) {
+          item <- bukti_button_item(
+            url = dat$link[i],
+            value1 = dat$amount[i],
+            value2 = dat$date[i]
+          )
+          items <- tagAppendChild(items, item)
+        }
+      } else {
+        for (i in seq_len(nrow(dat))) {
+          item <- bukti_button_item(
+            url = dat$link[i],
+            value2 = dat$date[i]
+          )
+          items <- tagAppendChild(items, item)
+        }
       }
+      
       items
     })
 

@@ -26,7 +26,7 @@ rename_sheet_cols  <- function(dat, cols_rules, revert=FALSE, rearrange=FALSE) {
   }
   dat <- dat %>%
     rename(any_of(cols_to))
-  if(rearrange) {
+  if (rearrange) {
     dat <- dat %>%
     select(any_of(names(cols_to)))
   }
@@ -37,16 +37,16 @@ rename_sheet_cols  <- function(dat, cols_rules, revert=FALSE, rearrange=FALSE) {
 read_tracker  <- function(sheet_id, sheet_name, cols_rules = NULL) {
   dat  <- read_sheet(sheet_id, sheet_name)
   dat  <-  dat %>%
-    mutate(blok_id = glue("{Blok}/{`Nomor Kavling`}")) 
+    mutate(blok_id = glue("{Blok}/{`Nomor Kavling`}"))
 
-  if(!is.null(cols_rules)){
+  if (!is.null(cols_rules)) {
     dat <- rename_sheet_cols(dat, cols_rules)
   }
   return(dat)
 }
 
 #' @export
-generate_data_bukti  <- function(data_main, date, link){
+generate_data_bukti  <- function(data_main, date, link) {
   stopifnot("blok_id" %in% colnames(data_main))
   stopifnot(inherits(date, "Date"))
 
