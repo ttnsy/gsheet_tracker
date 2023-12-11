@@ -5,8 +5,7 @@ box::use(
 )
 
 box::use(
-  app/logic/tracker_summary[...],
-  app/logic/utils_tracker[rename_sheet_cols]
+  app/logic/tracker[get_summary, rename_sheet_cols]
 )
 
 #' @export

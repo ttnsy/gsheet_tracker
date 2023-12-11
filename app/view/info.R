@@ -13,8 +13,7 @@ box::use(
 )
 
 box::use(
-  app/logic/card_info[format_info_fields_dat],
-  app/logic/utils_card[...]
+  app/logic/info[format_info_data, generate_info]
 )
 
 #' @export
@@ -22,7 +21,7 @@ ui <- function(id) {
   ns <- NS(id)
   div(
     class="card",
-    uiOutput(ns("info_fields"))
+    uiOutput(ns("info"))
   )
 }
 
@@ -31,21 +30,21 @@ server <- function(id, data_main_filtered, cols_rules) {
   moduleServer(id, function(input, output, session) {
     ns  <- session$ns
 
-    info_fields_data <- reactive({
+    info_data <- reactive({
       req(data_main_filtered())
       data <- data_main_filtered()
 
-      format_info_fields_dat(data, cols_rules)
+      format_info_data(data, cols_rules)
     })
 
-    output$info_fields <- renderUI({
-      req(info_fields_data())
-      data <- info_fields_data()
+    output$info <- renderUI({
+      req(info_data())
+      data <- info_data()
       labels <- colnames(data)
 
       texts <- tagList()
       for (i in 1:ncol(data)) {
-        text <- generate_info_field(
+        text <- generate_info(
           label = labels[i],
           value = data[i]
         )

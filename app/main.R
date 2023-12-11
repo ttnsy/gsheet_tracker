@@ -10,7 +10,7 @@ box::use(
 )
 
 box::use(
-  app/logic/utils_tracker[read_tracker],
+  app/logic/tracker[read_tracker],
   app/view/spr,
   app/view/tracker
 )

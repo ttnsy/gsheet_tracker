@@ -1,14 +1,24 @@
 box::use(
   dplyr[`%>%`, select, everything, mutate, rename],
-  glue[glue]
+  glue[glue],
+  shiny[div, tags]
 )
 
 box::use(
-  app/logic/utils_tracker[rename_sheet_cols]
+  app/logic/tracker[rename_sheet_cols]
 )
 
 #' @export
-format_info_fields_dat <- function(data, cols_rules) {
+generate_info <- function(label, value) {
+  div(
+    class = "info",
+    tags$label(label),
+    tags$h3(value)
+  )
+}
+
+#' @export
+format_info_data <- function(data, cols_rules) {
   data %>%
     select(blok_id, everything())  %>%
     mutate(

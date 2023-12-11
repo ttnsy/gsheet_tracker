@@ -8,9 +8,9 @@ box::use(
 )
 
 box::use(
-  app/logic/utils_tracker[...],
+  app/logic/tracker[...],
   app/view/bukti,
-  app/view/card_info,
+  app/view/info,
   app/view/input_kontraktor
 )
 
@@ -21,7 +21,7 @@ ui <- function(id) {
     uiOutput(ns("blok_id_ui")),
     div(
       class = "container-tracker",
-      card_info$ui(ns("card_info")),
+      info$ui(ns("info")),
       div(
         class = "card",
         bukti$ui(ns("pencairan"))
@@ -113,7 +113,7 @@ server <- function(id, sheet_id, data, data_cols) {
         filter(blok_id == input$blok_id)
     })
 
-    card_info$server("card_info", data_main_filtered, cols_rules = cols_spr)
+    info$server("info", data_main_filtered, cols_rules = cols_spr)
 
     bukti$server(
       "pencairan",

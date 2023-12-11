@@ -1,5 +1,16 @@
 box::use(
-  dplyr[`%>%`, all_of, select, mutate, rename, rename_at, rename_with, rename_all],
+  dplyr[
+    `%>%`,
+    any_of,
+    group_by,
+    mutate,
+    left_join,
+    n,
+    rename,
+    select,
+    summarise,
+    ungroup
+  ],
   glue[glue],
   googlesheets4[read_sheet],
   janitor[clean_names],
@@ -49,4 +60,31 @@ generate_data_bukti  <- function(data_main, date, link){
     select(-blok_id)
 
   out
+}
+
+get_done_termin <- function(konstruksi) {
+  konstruksi %>%
+    group_by(nama, blok_id) %>%
+    summarise(
+      termin_done = n()
+    ) %>%
+    ungroup()
+}
+
+#' @export
+get_summary  <- function(pencairan, konstruksi, kontraktor) {
+  done_termin  <- get_done_termin(konstruksi)
+
+  dat  <- pencairan %>%
+    group_by(nama, sistem_pembayaran, blok_id)  %>%
+    summarise(
+      jml_pencairan = n()
+    ) %>%
+    ungroup()  %>%
+    left_join(kontraktor) %>%
+    mutate(
+      termin_avail = ifelse(nama_kontraktor == "Asep", jml_pencairan * 3, jml_pencairan * 1),
+      termin_avail = pmin(termin_avail, 9)
+    ) %>%
+    left_join(done_termin)
 }
