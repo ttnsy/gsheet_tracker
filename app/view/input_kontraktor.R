@@ -49,7 +49,7 @@ server <- function(id, blok_id, cols_rules, data, sheet_id) {
       req(data_filtered())
       textInput(
         ns("kontraktor"),
-        label = "Nama Kontraktor:",
+        label = "Kontraktor",
         value = data_filtered()$nama_kontraktor
       ) %>%
         disabled()
@@ -64,7 +64,7 @@ server <- function(id, blok_id, cols_rules, data, sheet_id) {
           tagList(
             selectInput(
               ns("kontr_edit"),
-              label = "Nama kontraktor:",
+              label = "Pilih Kontraktor:",
               choices = c("Asep", "Buyung"),
               selected = data_filtered()$nama_kontraktor
             ),

@@ -13,7 +13,7 @@ generate_info <- function(label, value) {
   div(
     class = "info",
     tags$label(label),
-    tags$h3(value)
+    tags$h4(value)
   )
 }
 

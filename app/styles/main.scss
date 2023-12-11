@@ -114,6 +114,24 @@ img {
   border-radius: 12px;
   overflow: hidden;
   padding: 1.25em 1.5em;
+
+  &__header .control-label {
+    color: #A6A6A6;
+  }
+
+  &__title {
+    font-size: 16px;
+    height: auto;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 0.8em;
+  }
+
+  &--col2 {
+    display: flex;
+    gap: 3.2em;
+  }
 }
 
 .info {
@@ -127,7 +145,7 @@ img {
     text-transform: uppercase;
   }
 
-  h3 {
+  h4 {
     color: #000;
     font-size: 14px;
     letter-spacing: 2px;
@@ -165,9 +183,9 @@ img {
   }
 
   &__title {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   &__subtitle {
@@ -187,7 +205,7 @@ img {
     border-radius: 8px;
     gap: 1em;
     background-color: #fff;
-    width: 100%;
+    min-width: 16em;
     text-align: left;
 
     &:hover {
@@ -212,13 +230,13 @@ img {
 
   &__text {
     &--dark {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       color: #252F40;
     }
     
     &--light {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
       color: #67748E;
     }

@@ -25,18 +25,17 @@ ui <- function(id) {
       div(
         class = "card",
         bukti$ui(ns("pencairan"))
+      ),
+      div(
+        class = "card",
+        div(
+          class = "card__header",
+          h3(class = "card__title", "Pembayaran Kontraktor"),
+          input_kontraktor$ui(ns("input_kontraktor")),
+        ),
+        uiOutput(ns("bukti_ui_konstruksi"))
       )
-    ),
-    # div(
-    #   class = "tracker-contents",
-    #   fluidRow(
-    #     bukti$ui(ns("pencairan"), title = "Pencairan Bank")
-    #   ),
-    #   fluidRow(
-    #     input_kontraktor$ui(ns("input_kontraktor")),
-    #     uiOutput(ns("bukti_ui_konstruksi"))
-    #   )
-    # )
+    )
   )
 }
 
@@ -136,44 +135,46 @@ server <- function(id, sheet_id, data, data_cols) {
       sheet_id
     )
 
-    # observeEvent(input_kontraktor_val(), {
-    #   output$bukti_ui_konstruksi  <- renderUI({
-    #     if (input_kontraktor_val() == "") {
-    #         div(
-    #           class = "bukti_ui_message",
-    #           icon("table", "fa-5x"),
-    #           h5(
-    #             "Input nama kontraktor untuk memulai."
-    #           )
-    #         )
-    #     } else {
-    #       div(
-    #         class = "container-kontr",
-    #         bukti$ui(ns("kontr_progress"), title = "Progress Kontraktor"),
-    #         bukti$ui(ns("konstruksi"), title = "Pembayaran Kontraktor")
-    #       )
-    #     }
-    #   })
-    # })
+    observeEvent(input_kontraktor_val(), {
+      output$bukti_ui_konstruksi  <- renderUI({
+        if (input_kontraktor_val() == "") {
+            div(
+              class = "bukti_ui_message",
+              icon("table", "fa-5x"),
+              h5(
+                "Input nama kontraktor untuk memulai."
+              )
+            )
+        } else {
+          div(
+            class = "card--col2",
+            bukti$ui(ns("kontr_progress"), title = "Progress Kontraktor"),
+            bukti$ui(ns("konstruksi"), title = "Pembayaran Kontraktor")
+          )
+        }
+      })
+    })
 
-    # bukti$server(
-    #   "kontr_progress",
-    #   sheet_id,
-    #   sheet = "kontraktor_progress",
-    #   trigger = session$userData$kontr_progress_trigger,
-    #   data_main = data_main_filtered,
-    #   data = data_kontr_progress_raw,
-    #   cols_rules = cols_kontraktor_progress
-    # )
+    bukti$server(
+      "kontr_progress",
+      title = "Bukti Progress",
+      sheet_id,
+      sheet = "kontraktor_progress",
+      trigger = session$userData$kontr_progress_trigger,
+      data_main = data_main_filtered,
+      data = data_kontr_progress_raw,
+      cols_rules = cols_kontraktor_progress
+    )
 
-    # bukti$server(
-    #   "konstruksi",
-    #   sheet_id,
-    #   sheet = "konstruksi",
-    #   trigger = session$userData$konstruksi_trigger,
-    #   data_main = data_main_filtered,
-    #   data = data_konstruksi_raw,
-    #   cols_rules = cols_konstruksi
-    # )
+    bukti$server(
+      "konstruksi",
+      title = "Bukti Transfer",
+      sheet_id,
+      sheet = "konstruksi",
+      trigger = session$userData$konstruksi_trigger,
+      data_main = data_main_filtered,
+      data = data_konstruksi_raw,
+      cols_rules = cols_konstruksi
+    )
   })
 }

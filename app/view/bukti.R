@@ -53,8 +53,8 @@ server <- function(id, title, sheet_id, sheet, trigger, data_main, data, cols_ru
       dat <- data_filtered()
       subtitle <- done_to_target_perc(dat)
       tagList(
-        h2(class = "bukti__title", title),
-        h3(class = "bukti__subtitle", subtitle)
+        h4(class = "bukti__title", title),
+        span(class = "bukti__subtitle", subtitle)
       )
     })
     output$bukti_items <- renderUI({
