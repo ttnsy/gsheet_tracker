@@ -1,3 +1,5 @@
+options(scipen = 99)
+
 box::use(
   shiny[...],
   shinyFeedback[showToast],
@@ -10,24 +12,21 @@ box::use(
 )
 
 box::use(
+  app/logic/info[generate_info],
   app/logic/tracker[rename_sheet_cols]
 )
-
-js <- "
-$(document).on('shiny:value', function(e) {
-  if(e.name === 'spr'){
-    setTimeout(function(){Shiny.bindAll(document.getElementById('spr'))}, 0);
-  }
-});
-"
 
 #' @export
 ui <- function(id) {
   ns <- NS(id)
+
   div(
     class = "container-spr",
     uiOutput(ns("spr_filter")),
-    reactableOutput(ns("spr"))
+    div(
+      class = "container-tbl card",
+      reactableOutput(ns("spr"))
+    )
   )
 }
 
@@ -56,19 +55,17 @@ server <- function(id, sheet_id, spr_data, cols_rules) {
       filter_checkbox(
         "status",
         "Status",
+        inline = TRUE,
         spr_shared,
         ~ Status
       )
     })
 
     output$spr <- renderReactable({
-      sticky_style  <- list(backgroundColor = "#f7f7f7")
-
       reactable(
         spr_shared,
         class = "tbl-spr",
         searchable = TRUE,
-        bordered = TRUE,
         wrap = FALSE,
         resizable = TRUE,
         defaultPageSize = 15,
@@ -80,11 +77,24 @@ server <- function(id, sheet_id, spr_data, cols_rules) {
           return { backgroundColor: '#eee', boxShadow: 'inset 2px 0 0 0 #ffa62d' }
           }
         }"),
+        defaultColDef = colDef(
+          cell = function(value) {
+            if (!is.numeric(value)) {
+              return(value)
+            }
+            format(value, big.mark = ",")
+          },
+          headerClass = "reactable__header",
+          align = "left",
+          vAlign = "center",
+          style = list(
+            height = "40px",
+            fontSize = "12.5px"
+          )
+        ),
         columns = list(
           Timestamp = colDef(
-            sticky = "left",
-            style = sticky_style,
-            headerStyle = sticky_style
+            sticky = "left"
           ),
           Status = colDef(
             sticky = "left",
@@ -97,12 +107,10 @@ server <- function(id, sheet_id, spr_data, cols_rules) {
                 color  <- "#777"
               }
               list(
-                backgroundColor = "#f7f7f7",
                 color = color,
                 fontWeight = "bold"
               )
             },
-            headerStyle = sticky_style,
             align = "center"
           ),
           `Bukti Booking Fee` = colDef(
@@ -112,7 +120,9 @@ server <- function(id, sheet_id, spr_data, cols_rules) {
       )
     })
 
-    col_state <- reactive({getReactableState("spr", "selected")})
+    col_state <- reactive({
+      getReactableState("spr", "selected")
+    })
 
     to_edit <- reactive({
       req(col_state())
@@ -124,15 +134,28 @@ server <- function(id, sheet_id, spr_data, cols_rules) {
     observeEvent(col_state(), {
       dat <- to_edit()
 
+      info <- tagList(
+        generate_info(
+          "Nama",
+          dat$nama
+        ),
+        generate_info(
+          "Blok/No. Kavling",
+          glue("{dat$blok}/{dat$no_kavling}")
+        )
+      )
+
       showModal(
         modalDialog(
           class = "modal-edit",
-          title = glue("{dat$nama} ({dat$blok}/{dat$no_kavling})"),
-          selectInput(
-            ns("status"),
-            "Status",
-            choices = c("Cancel", "Process", "Reject"),
-            selected = dat$status
+          tagList(
+            info,
+            selectInput(
+              ns("status"),
+              "Status",
+              choices = c("Cancel", "Process", "Reject"),
+              selected = dat$status
+            )
           ),
           footer = list(
             modalButton("Cancel"),

@@ -130,22 +130,25 @@ ol, ul {
 }
 
 // SPR
-
 #app-spr-spr {
-  width: 85% !important;
-}
-img {
-  max-width: 100%;
-  height: auto;
+  width: 95% !important;
 }
 
-.container-spr {
+.container-tbl {
   display: flex;
-  gap: 1.5em;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  background-color: #fff;
+  padding: 0 !important;
 }
 
-#app-spr-spr_filter {
-  padding: 1em;
+.reactable__header {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #555;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 // TRACKER
@@ -198,7 +201,7 @@ img {
   label {
     display: block;
     color: #A6A6A6;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: bold;
     letter-spacing: 1px;
     margin-bottom: 8px;
@@ -209,7 +212,7 @@ img {
     color: #000;
     font-size: 14px;
     letter-spacing: 1px;
-    margin-bottom: 1em;
+    margin-bottom: 1.25em;
     text-transform: uppercase;
   }
 }
