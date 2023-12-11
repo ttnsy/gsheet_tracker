@@ -1,5 +1,5 @@
 box::use(
-  shiny[bootstrapPage, moduleServer, NS, renderText, tags, reactive, req, reactiveVal],
+  shiny[fluidPage, moduleServer, NS, renderText, tags, reactive, req, reactiveVal, tagList],
   shiny.router[router_ui, router_server, route, route_link],
   googlesheets4[...],
   googledrive[drive_auth],
@@ -19,22 +19,23 @@ box::use(
 ui <- function(id) {
   ns <- NS(id)
 
-  bootstrapPage(
-    title = "Tracker Sample",
+  tagList(
     tags$nav(
-      class = "navbar",
-      tags$ul(
-        tags$li(
-          tags$a(class = "nav-link", "Tabel SPR", href = route_link("/"))
-        ),
-        tags$li(
-          tags$a(class = "nav-link", "Tracker", href = route_link("tracker"))
-        )
+    class = "navbar",
+    tags$ul(
+      tags$li(
+        tags$a(class = "nav-link", "Tabel SPR", href = route_link("/"))
+      ),
+      tags$li(
+        tags$a(class = "nav-link", "Tracker", href = route_link("tracker"))
       )
-    ),
+    )
+  ),
+  fluidPage(
     router_ui(
       route("/", spr$ui(ns("spr"))),
       route("tracker", tracker$ui(ns("tracker")))
+      )
     )
   )
 }

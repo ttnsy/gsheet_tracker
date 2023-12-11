@@ -101,7 +101,7 @@ server <- function(id, sheet_id, data, data_cols) {
     output$blok_id_ui  <- renderUI({
       selectInput(
         ns("blok_id"),
-        "Pilih Blok/Kavling:",
+        "Blok/ No. Kavling:",
         choices = sort(data()$blok_id)
       )
     })

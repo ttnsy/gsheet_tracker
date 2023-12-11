@@ -27,6 +27,10 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul {
   font-weight: normal;
 }
 
+body {
+  background-color: #F8F9FA;
+}
+
 ol, ul {
   list-style: none;
 }
@@ -40,14 +44,59 @@ ol, ul {
   .control-label {
     font-size: 12px;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     text-transform: uppercase;
   }
  
   .item {
-    letter-spacing: 2px;
+    letter-spacing: 1px;
   }
 }
+
+.modal-content {
+  padding: 1em 0 1em 1.5em;
+}
+
+.modal-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.modal-footer {
+ display: flex;
+ justify-content: flex-end;
+ align-self: stretch;
+ border-top: 0px; 
+ gap: 0.8em;
+
+ button {
+  padding: 12px 20px;
+	border-radius: 8px;
+	background-color: transparent;
+	border: 0;
+	font-weight: 600;
+	cursor: pointer;
+	transition: 0.15s ease;
+ }
+
+ .btn-default {
+  &:hover,
+		&:focus {
+			background-color: #dfdad7;
+		}
+ }
+
+ .btn-primary {
+  background-color: #077d6b;
+		color: #fff;
+		&:hover,
+		&:focus {
+			background-color: #02241f;
+		}
+	}
+}
+
 
 // NAVBAR
 #router-page-wrapper {
@@ -57,7 +106,7 @@ ol, ul {
 .navbar {
   padding: 1em;
   margin-bottom: 0;
-
+  
   li {
     float: left;
     a {
@@ -110,10 +159,11 @@ img {
   flex-direction: column;
   gap: 0.8em;
   min-width: 20rem;
+  background-color: #fff;
   box-shadow: 0px 20px 27px rgba(0, 0, 0, 0.05);
   border-radius: 12px;
-  overflow: hidden;
-  padding: 1.25em 1.5em;
+  overflow: overlay;
+  padding: 2em 4em 4em 2em;
 
   &__header .control-label {
     color: #A6A6A6;
@@ -124,7 +174,7 @@ img {
     height: auto;
     text-transform: uppercase;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     margin-bottom: 0.8em;
   }
 
@@ -150,7 +200,7 @@ img {
     color: #A6A6A6;
     font-size: 11px;
     font-weight: bold;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     margin-bottom: 8px;
     text-transform: uppercase;
   }
@@ -158,7 +208,7 @@ img {
   h4 {
     color: #000;
     font-size: 14px;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     margin-bottom: 1em;
     text-transform: uppercase;
   }
@@ -184,6 +234,7 @@ img {
     color: #A6A6A6;
     width: 100%;
     text-align: left;
+    min-width: 16em;
 
     &:hover {
       color: #077d6b;
@@ -211,7 +262,7 @@ img {
   &__button {
     display: flex;
     padding: 14px;
-    border: 1.5px solid #A6A6A6;
+    border: 1px solid #ececec;
     border-radius: 8px;
     gap: 1em;
     background-color: #fff;
@@ -251,13 +302,6 @@ img {
       color: #67748E;
     }
   }
-}
-
-.label-modal {
-  display: inline-block;
-  max-width: 100%;
-  margin-bottom: 5px;
-  font-weight: 700;
 }
 
 .container-input-kontraktor {
