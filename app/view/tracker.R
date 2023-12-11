@@ -139,9 +139,9 @@ server <- function(id, sheet_id, data, data_cols) {
       output$bukti_ui_konstruksi  <- renderUI({
         if (input_kontraktor_val() == "") {
             div(
-              class = "bukti_ui_message",
-              icon("table", "fa-5x"),
-              h5(
+              class = "card__placeholder",
+              icon("user-pen", "fa-3x"),
+              p(
                 "Input nama kontraktor untuk memulai."
               )
             )
