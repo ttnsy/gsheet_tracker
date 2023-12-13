@@ -1,7 +1,7 @@
 box::use(
   glue[glue],
-  htmltools[...],
-  testthat[...],
+  htmltools[tagQuery, tagGetAttribute],
+  testthat[describe, it, expect_equal, expect_true],
   fixtuRes[random_numeric, random_datetime, random_string]
 )
 
