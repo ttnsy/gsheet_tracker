@@ -2,7 +2,7 @@
 
 ### 👋 Welcome 
 
-This app is a simple showcase of how Shiny can work with googlesheet to handle tracker data. It's a demo, so it's not packed with features, but it's got enough to give you a taste of what's possible ✨. This app:
+This app is a showcase of how Shiny can work with googlesheet to handle tracker data. It's a demo, so it's not packed with features, but it's got enough to give you a taste of what's possible ✨. This app:
 
 - Retrieves its primary data directly from a Google Sheet.
 - Enables users to update the Google Sheet directly within the application.
