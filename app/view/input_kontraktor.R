@@ -65,7 +65,7 @@ server <- function(id, blok_id, cols_rules, data, sheet_id) {
             selectInput(
               ns("kontr_edit"),
               label = "Pilih Kontraktor:",
-              choices = c("Asep", "Buyung"),
+              choices = c("KONTRAKTOR A", "KONTRAKTOR B"),
               selected = data_filtered()$nama_kontraktor
             ),
             reactable(kontr_info())
