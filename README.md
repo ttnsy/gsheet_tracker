@@ -8,7 +8,7 @@ This app is a simple showcase of how Shiny can work with googlesheet to handle t
 - Enables users to update the Google Sheet directly within the application.
 - Includes a feature that allows users to upload images to Google Drive and subsequently update the corresponding links in the Google Sheet.
 
-### How to Run
+### How to Run 🏃‍♀️
 1. **Restore dependencies:**
    This app is built using `rhino` which relies on `renv` for managing dependencies. Start by running `renv::restore()` to install all necessary packages.
 2. **Set up environment variable:**
@@ -17,7 +17,7 @@ This app is a simple showcase of how Shiny can work with googlesheet to handle t
    - `GOOGLE_SHEET_URL`: Paste [this](https://docs.google.com/spreadsheets/d/1DTgvB2-tZpb37maYWc18sDQ2xQ_jGVlefYGCU08mvvc/edit?usp=sharing) googlesheet url.
 3. Run with `rhino::app()`
 
-### Using the app
+### Using the app 🚜
 
 The app has two main pages:
 
@@ -35,6 +35,6 @@ The app has two main pages:
   - Display a list of buttons indicating dates and amounts of transactions. Clicking on a button opens a new page that links to a Google Drive image showing the payment proof.
   - The `+ Tambah baru` button allows users to add new transaction proofs. Users can enter transaction details and upload an image of the payment proof, which then updates the relevant links in the Google Sheet.
 
-### Your thoughts? 🤔
+### Your thoughts? 🐱
 
 If you have suggestions or improvements, I’m open to hearing them. Feel free to fork the repo or send over your ideas 🌈 ✨!
