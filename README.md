@@ -30,8 +30,7 @@ The app has two main pages:
 - The tracker page features three distinct cards:
   - **Info Card**: Summarizes customer details based on the lot number selected.
   - **Bukti Pembayaran Bank**: This card focuses on tracking the disbursements from the bank.
-  - **Pembayaran Kontraktor**: Keeps track of construction progress and contractor payments.
-<br>
+  - **Pembayaran Kontraktor**: Keeps track of construction progress and contractor payments.<br><br>
 - **Bukti Pembayaran Bank** and **Pembayaran Kontraktor** cards share the following functionalities:
   - Display a list of buttons indicating dates and amounts of transactions. Clicking on a button opens a new page that links to a Google Drive image showing the payment proof.
   - The `+ Tambah baru` button allows users to add new transaction proofs. Users can enter transaction details and upload an image of the payment proof, which then updates the relevant links in the Google Sheet.
