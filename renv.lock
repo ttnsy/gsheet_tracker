@@ -1382,7 +1382,7 @@
       "Package": "xfun",
       "Version": "0.39.1",
       "Source": "Repository",
-      "Repository": "https://yihui.r-universe.dev",
+      "Repository": "CRAN",
       "Requirements": [
         "stats",
         "tools"
