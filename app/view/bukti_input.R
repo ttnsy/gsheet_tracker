@@ -29,6 +29,17 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, t
     label_date  <- glue("Tanggal {label}:")
     label_bukti  <- glue("Bukti {label}:")
 
+    if ("amount" %in% cols_rules) {
+      label_amount <- glue("Jumlah {label}:")
+      amount_ui <- numericInput(
+        ns("amount"),
+        label = label_amount,
+        value = 0
+      )
+    } else {
+      amount_ui <- NULL
+    }
+
     output$btn_add_ui  <- renderUI({
       actionButton(
         ns("btn_add"),
@@ -47,6 +58,7 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, t
               ns("date"),
               label = label_date
             ),
+            amount_ui,
             radioButtons(
               ns("upload_opt"),
               label = label_bukti,
@@ -115,6 +127,7 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, t
       }
       req(exists("link"))
       list(
+        amount = if ("amount" %in% cols_rules) input$amount else NA,
         date = input$date,
         link = link
       )
@@ -125,13 +138,15 @@ server <- function(id, label, data_main_filtered, sheet_id, sheet, cols_rules, t
       req(data_main_filtered())
 
       date <- out()$date
+      amount <- out()$amount
       link <- out()$link
       data_main  <- data_main_filtered() %>% clean_names()
 
       dat <- generate_data_bukti(
         data_main,
         date,
-        link
+        link,
+        amount
       )
 
       dat <- rename_sheet_cols(dat, cols_rules, revert=TRUE, rearrange=TRUE)

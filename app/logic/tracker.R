@@ -46,7 +46,7 @@ read_tracker  <- function(sheet_id, sheet_name, cols_rules = NULL) {
 }
 
 #' @export
-generate_data_bukti  <- function(data_main, date, link) {
+generate_data_bukti  <- function(data_main, date, link, amount) {
   stopifnot("blok_id" %in% colnames(data_main))
   stopifnot(inherits(date, "Date"))
 
@@ -58,6 +58,13 @@ generate_data_bukti  <- function(data_main, date, link) {
       link = link
     ) %>%
     select(-blok_id)
+
+  if (!is.na(amount)) {
+    out <- out %>%
+      mutate(
+        amount = amount
+      )
+  }
 
   out
 }
