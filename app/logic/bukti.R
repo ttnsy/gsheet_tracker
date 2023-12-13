@@ -3,18 +3,16 @@ box::use(
   shiny[h3, isTruthy, tagList, tags, icon, div]
 )
 
-is_date <- function(x) {
-  inherits(x, c("Date", "POSIXt"))
-}
+box::use(
+  app/logic/utils[is_date, format_dttm, format_rupiah]
+)
 
 #' @export
 format_bukti_value <- function(value) {
   if (is.numeric(value)) {
-    value <- round(value, digits=2)
-    value <- format(value, nsmall = 2, big.mark = ".", decimal.mark=",")
-    glue("Rp. {value}")
+    format_rupiah(value)
   } else if (is_date(value)) {
-    format(value, "%b %d, %Y %H:%M:%S")
+    format_dttm(value)
   } else {
     value
   }
