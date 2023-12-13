@@ -10,9 +10,13 @@ is_Date <- function(x) {
 #' @export
 format_bukti_value <- function(value) {
   if (is.numeric(value)) {
-    glue("RP. {format(value, big.mark = ',')},-")
+    value <- round(value, digits=2)
+    value <- format(value, nsmall = 2, big.mark = ".", decimal.mark=",")
+    glue("Rp. {value}")
   } else if (is_Date(value)) {
-    format(value, "%b %d, %Y %H:%M")
+    format(value, "%b %d, %Y %H:%M:%S")
+  } else {
+    value
   }
 }
 
