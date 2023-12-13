@@ -85,7 +85,6 @@ server <- function(id, title, sheet_id, sheet, trigger, data_main, data, cols_ru
           items <- tagAppendChild(items, item)
         }
       }
-      
       items
     })
 

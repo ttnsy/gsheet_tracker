@@ -33,4 +33,4 @@ format_info_data <- function(data, cols_rules) {
       `Blok/No. Kavling` = blok_id,
       `Tipe Rumah` = `Tipe Rumah yang Diminati dan Luas Tanah`
     )
-  }
+}

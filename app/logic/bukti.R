@@ -3,7 +3,7 @@ box::use(
   shiny[h3, isTruthy, tagList, tags, icon, div]
 )
 
-is_Date <- function(x) {
+is_date <- function(x) {
   inherits(x, c("Date", "POSIXt"))
 }
 
@@ -13,7 +13,7 @@ format_bukti_value <- function(value) {
     value <- round(value, digits=2)
     value <- format(value, nsmall = 2, big.mark = ".", decimal.mark=",")
     glue("Rp. {value}")
-  } else if (is_Date(value)) {
+  } else if (is_date(value)) {
     format(value, "%b %d, %Y %H:%M:%S")
   } else {
     value
@@ -21,7 +21,7 @@ format_bukti_value <- function(value) {
 }
 
 #' @export
-get_bukti_text <- function(value1, value2) {
+get_bukti_text <- function(value1=NULL, value2=NULL) {
   value1 <- if (isTruthy(value1)) {
     h3(class = "bukti__text--dark", value1)
   }
