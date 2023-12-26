@@ -45,11 +45,12 @@ server <- function(id) {
   moduleServer(id, function(input, output, session) {
     router_server("/")
 
-    google_mail <- Sys.getenv("GOOGLE_MAIL")
     google_sheet_url  <- Sys.getenv("GOOGLE_SHEET_URL")
+    google_service_acc_token <- Sys.getenv("GOOGLE_SERVICE_ACCOUNT_TOKEN")
+    google_service_acc_path <- glue(".secrets/{google_service_acc_token}")
 
-    gs4_auth(cache = ".secrets", email = google_mail)
-    drive_auth(cache = ".secrets", email = google_mail)
+    gs4_auth(path = google_service_acc_path)
+    drive_auth(path = google_service_acc_path)
     sheet_id  <- as_sheets_id(google_sheet_url)
 
     #' trigger to reload data from gsheet
