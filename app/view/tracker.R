@@ -8,6 +8,7 @@ box::use(
 )
 
 box::use(
+  app/config[...],
   app/logic/tracker[...],
   app/view/bukti,
   app/view/info,
@@ -44,7 +45,7 @@ server <- function(id, sheet_id, data, data_cols) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    cols_spr <- data_cols[["spr"]]
+    cols_spr <- data_cols[[sheet_name_spr]]
     cols_pencairan  <- data_cols[["pencairan"]]
     cols_konstruksi  <- data_cols[["konstruksi"]]
     cols_kontraktor  <- data_cols[["kontraktor"]]

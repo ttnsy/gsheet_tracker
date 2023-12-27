@@ -11,7 +11,7 @@ box::use(
 
 box::use(
   app/config[...],
-  app/logic/tracker[read_tracker],
+  app/logic/main[read_spr_data],
   app/view/spr,
   app/view/tracker
 )
@@ -59,15 +59,11 @@ server <- function(id) {
 
     spr_data <- reactive({
       session$userData$spr_trigger()
-
-      read_tracker(
+      read_spr_data(
         sheet_id,
-        sheet_name = "spr",
-        cols_rules = data_cols[["spr"]]
-      ) %>%
-        group_by(blok_id) %>%
-        slice(which.max(timestamp)) %>%
-        ungroup()
+        sheet_name = sheet_name_spr,
+        cols_rules = data_cols[[sheet_name_spr]]
+      )
     })
 
     spr_data_process  <- reactive({
@@ -76,7 +72,7 @@ server <- function(id) {
         filter(status == "Process")
     })
 
-    spr$server("spr", sheet_id, spr_data, cols_rules = data_cols[["spr"]])
+    spr$server("spr", sheet_id, spr_data, cols_rules = data_cols[[sheet_name_spr]])
     tracker$server("tracker", sheet_id, data = spr_data_process, data_cols)
   })
 }

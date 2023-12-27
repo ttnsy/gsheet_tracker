@@ -181,7 +181,7 @@ server <- function(id, sheet_id, spr_data, cols_rules) {
         ) %>%
       rename_sheet_cols(cols_rules, revert=TRUE)
 
-      sheet_append(sheet_id, dat, sheet = "spr")
+      sheet_append(sheet_id, dat, sheet = sheet_name_spr)
       removeModal()
       session$userData$spr_trigger(session$userData$spr_trigger() + 1)
       showToast("success", "Success updating status.")
