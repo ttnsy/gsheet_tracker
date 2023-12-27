@@ -62,7 +62,7 @@ server <- function(id) {
       read_spr_data(
         sheet_id,
         sheet_name = sheet_name_spr,
-        cols_rules = data_cols[[sheet_name_spr]]
+        cols_rules = cols_spr
       )
     })
 
@@ -72,7 +72,7 @@ server <- function(id) {
         filter(status == "Process")
     })
 
-    spr$server("spr", sheet_id, spr_data, cols_rules = data_cols[[sheet_name_spr]])
-    tracker$server("tracker", sheet_id, data = spr_data_process, data_cols)
+    spr$server("spr", sheet_id, spr_data, cols_rules = cols_spr)
+    tracker$server("tracker", sheet_id, data = spr_data_process)
   })
 }

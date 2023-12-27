@@ -10,6 +10,7 @@ box::use(
 )
 
 box::use(
+  app/config[sheet_name_kontraktor],
   app/logic/tracker[rename_sheet_cols]
 )
 
@@ -108,7 +109,6 @@ server <- function(id, blok_id, cols_rules, data, sheet_id) {
     observeEvent(out(), {
       req(out())
       dat <- out()
-      sheet <- "kontraktor"
 
       if (blok_id() %in% data()$blok_id) {
         data <- out()$data
@@ -122,7 +122,7 @@ server <- function(id, blok_id, cols_rules, data, sheet_id) {
           col_names = FALSE
         )
       } else {
-        sheet_append(sheet_id, dat, sheet = sheet)
+        sheet_append(sheet_id, dat, sheet = sheet_name_kontraktor)
       }
       session$userData$kontraktor_trigger(session$userData$kontraktor_trigger()+1)
       removeModal()

@@ -41,15 +41,9 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id, sheet_id, data, data_cols) {
+server <- function(id, sheet_id, data) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
-    cols_spr <- data_cols[[sheet_name_spr]]
-    cols_pencairan  <- data_cols[["pencairan"]]
-    cols_konstruksi  <- data_cols[["konstruksi"]]
-    cols_kontraktor  <- data_cols[["kontraktor"]]
-    cols_kontraktor_progress  <- data_cols[["kontraktor_progress"]]
 
     data_main  <- reactive({
       data() %>%
@@ -67,7 +61,7 @@ server <- function(id, sheet_id, data, data_cols) {
       session$userData$pencairan_trigger()
       read_tracker(
         sheet_id,
-        "pencairan",
+        sheet_name_pencairan,
         cols_rules = cols_pencairan
       )
     })
@@ -76,7 +70,7 @@ server <- function(id, sheet_id, data, data_cols) {
       session$userData$konstruksi_trigger()
       read_tracker(
         sheet_id,
-        "konstruksi",
+        sheet_name_konstruksi,
         cols_rules = cols_konstruksi
       )
     })
@@ -85,8 +79,8 @@ server <- function(id, sheet_id, data, data_cols) {
       session$userData$kontr_progress_trigger()
       read_tracker(
         sheet_id,
-        "kontraktor_progress",
-        cols_rules = cols_kontraktor_progress
+        sheet_name_kontr_progress,
+        cols_rules = cols_kontr_progress
       )
     })
 
@@ -94,7 +88,7 @@ server <- function(id, sheet_id, data, data_cols) {
       session$userData$kontraktor_trigger()
       read_tracker(
         sheet_id,
-        "kontraktor",
+        sheet_name_kontraktor,
         cols_rules = cols_kontraktor
       )
     })
@@ -119,7 +113,7 @@ server <- function(id, sheet_id, data, data_cols) {
       "pencairan",
       title = "Bukti Pencairan Bank",
       sheet_id,
-      sheet = "pencairan",
+      sheet = sheet_name_pencairan,
       trigger = session$userData$pencairan_trigger,
       data_main = data_main_filtered,
       data = data_pencairan_raw,
@@ -160,18 +154,18 @@ server <- function(id, sheet_id, data, data_cols) {
       "kontr_progress",
       title = "Bukti Progress",
       sheet_id,
-      sheet = "kontraktor_progress",
+      sheet = sheet_name_kontr_progress,
       trigger = session$userData$kontr_progress_trigger,
       data_main = data_main_filtered,
       data = data_kontr_progress_raw,
-      cols_rules = cols_kontraktor_progress
+      cols_rules = cols_kontr_progress
     )
 
     bukti$server(
       "konstruksi",
       title = "Bukti Transfer",
       sheet_id,
-      sheet = "konstruksi",
+      sheet = sheet_name_konstruksi,
       trigger = session$userData$konstruksi_trigger,
       data_main = data_main_filtered,
       data = data_konstruksi_raw,

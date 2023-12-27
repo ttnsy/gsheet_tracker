@@ -1,3 +1,5 @@
+# Map column names between Google Sheet and the corresponding R dataframe after export.
+# PLEASE MAKE SURE that the names of colnames dictionary match the sheet names in the Google sheet.
 default:
   spr:
     Timestamp: timestamp
