@@ -10,6 +10,7 @@ box::use(
 )
 
 box::use(
+  app/config[...],
   app/logic/tracker[read_tracker],
   app/view/spr,
   app/view/tracker
@@ -45,10 +46,6 @@ server <- function(id) {
   moduleServer(id, function(input, output, session) {
     router_server("/")
 
-    google_sheet_url  <- Sys.getenv("GOOGLE_SHEET_URL")
-    google_service_acc_token <- Sys.getenv("GOOGLE_SERVICE_ACCOUNT_TOKEN")
-    google_service_acc_path <- glue(".secrets/{google_service_acc_token}")
-
     gs4_auth(path = google_service_acc_path)
     drive_auth(path = google_service_acc_path)
     sheet_id  <- as_sheets_id(google_sheet_url)
@@ -59,9 +56,6 @@ server <- function(id) {
     session$userData$konstruksi_trigger <- reactiveVal(0)
     session$userData$kontr_progress_trigger  <- reactiveVal(0)
     session$userData$kontraktor_trigger  <- reactiveVal(0)
-
-    #' columns
-    data_cols  <- config::get(file = "data_cols.yml")
 
     spr_data <- reactive({
       session$userData$spr_trigger()
