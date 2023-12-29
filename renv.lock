@@ -116,14 +116,14 @@
     },
     "box": {
       "Package": "box",
-      "Version": "1.1.0",
+      "Version": "1.1.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "tools"
       ],
-      "Hash": "9b84787d7fa74d7cba737f703317e900"
+      "Hash": "ce8187a260e8e3abc2294284badc3b76"
     },
     "brio": {
       "Package": "brio",
@@ -998,18 +998,21 @@
     },
     "rhino": {
       "Package": "rhino",
-      "Version": "0.6.4",
+      "Version": "1.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
+        "R",
         "box",
         "cli",
+        "config",
         "fs",
         "glue",
         "lintr",
         "logger",
         "purrr",
         "renv",
+        "rstudioapi",
         "sass",
         "shiny",
         "styler",
@@ -1018,7 +1021,7 @@
         "withr",
         "yaml"
       ],
-      "Hash": "0fd18b470b37cf2e64eba385fda40bb5"
+      "Hash": "aec1b2db96151d32a244d38b136d8392"
     },
     "rlang": {
       "Package": "rlang",
@@ -1064,6 +1067,13 @@
         "R"
       ],
       "Hash": "1de7ab598047a87bba48434ba35d497d"
+    },
+    "rstudioapi": {
+      "Package": "rstudioapi",
+      "Version": "0.15.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "5564500e25cffad9e22244ced1379887"
     },
     "sass": {
       "Package": "sass",
