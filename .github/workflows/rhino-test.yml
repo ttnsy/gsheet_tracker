@@ -7,7 +7,7 @@ jobs:
     name: Run linters and tests
     runs-on: ubuntu-20.04
     env:
-      R_VERSION: '4.2.2'
+      R_VERSION: '4.3.2'
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout repo
@@ -17,11 +17,6 @@ jobs:
         uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ env.R_VERSION }}
-
-      - name: Install libcurl
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev
 
       - name: Restore renv from cache
         uses: actions/cache@v2
