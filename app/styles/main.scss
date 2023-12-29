@@ -12,12 +12,23 @@ html {
   box-sizing: border-box;
   font-size: 14px;
 }
-  
-*, *:before, *:after {
+
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
-body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul {
   font-family: $font-main;
   height: 100%;
   margin: 0;
@@ -26,10 +37,11 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul {
 }
 
 body {
-  background-color: #F8F9FA;
+  background-color: #f8f9fa;
 }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
 
@@ -45,7 +57,7 @@ ol, ul {
     letter-spacing: 1px;
     text-transform: uppercase;
   }
- 
+
   .item {
     letter-spacing: 1px;
   }
@@ -62,39 +74,39 @@ ol, ul {
 }
 
 .modal-footer {
- display: flex;
- justify-content: flex-end;
- align-self: stretch;
- border-top: 0px; 
- gap: 0.8em;
+  display: flex;
+  justify-content: flex-end;
+  align-self: stretch;
+  border-top: 0;
+  gap: 0.8em;
 
- button {
-  padding: 12px 20px;
-	border-radius: 8px;
-	background-color: transparent;
-	border: 0;
-	font-weight: 600;
-	cursor: pointer;
-	transition: 0.15s ease;
- }
+  button {
+    padding: 12px 20px;
+    border-radius: 8px;
+    background-color: transparent;
+    border: 0;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.15s ease;
+  }
 
- .btn-default {
-  &:hover,
-		&:focus {
-			background-color: #dfdad7;
-		}
- }
+  .btn-default {
+    &:hover,
+    &:focus {
+      background-color: #dfdad7;
+    }
+  }
 
- .btn-primary {
-  background-color: $green;
-		color: #fff;
-		&:hover,
-		&:focus {
-			background-color: #02241f;
-		}
-	}
+  .btn-primary {
+    background-color: $green;
+    color: #fff;
+
+    &:hover,
+    &:focus {
+      background-color: #02241f;
+    }
+  }
 }
-
 
 // NAVBAR
 #router-page-wrapper {
@@ -104,16 +116,17 @@ ol, ul {
 .navbar {
   padding: 1em;
   margin-bottom: 0;
-  
+
   li {
     float: left;
+
     a {
       display: block;
       padding: 8px 16px;
       text-decoration: none;
       color: $grey;
       font-weight: 700;
-      
+
       &:hover {
         color: $dark-green;
         border-bottom: 2px solid $dark-green;
@@ -161,7 +174,7 @@ ol, ul {
   gap: 0.8em;
   min-width: 20rem;
   background-color: #fff;
-  box-shadow: 0px 20px 27px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 27px rgba(0, 0, 0, 0.05);
   border-radius: 12px;
   overflow: overlay;
   padding: 2em 4em 4em 2em;
@@ -184,7 +197,7 @@ ol, ul {
     flex-direction: column;
     gap: 0.8em;
     align-items: center;
-    color : $grey65;
+    color: $grey65;
     text-transform: uppercase;
     letter-spacing: 1px;
   }
@@ -274,7 +287,7 @@ ol, ul {
       color: white;
       border: 1.5px solid $green;
       transition: all 0.2s ease-out;
-      box-shadow: 0px 4px 8px rgba(38, 38, 38, 0.2);
+      box-shadow: 0 4px 8px rgba(38, 38, 38, 0.2);
       top: -4px;
 
       * {
@@ -286,20 +299,20 @@ ol, ul {
   &__label {
     display: flex;
     flex-direction: column;
-    gap: 0.5em;  
+    gap: 0.5em;
   }
 
   &__text {
     &--dark {
       font-size: 14px;
       font-weight: 600;
-      color: #252F40;
+      color: #252f40;
     }
-    
+
     &--light {
       font-size: 12px;
       font-weight: 600;
-      color: #67748E;
+      color: #67748e;
     }
   }
 }
@@ -307,7 +320,7 @@ ol, ul {
 .container-input-kontraktor {
   display: flex;
   gap: 1em;
-    
+
   button {
     display: flex;
     align-items: center;
@@ -316,4 +329,3 @@ ol, ul {
     margin-top: 10px;
   }
 }
-
