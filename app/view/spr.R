@@ -12,6 +12,7 @@ box::use(
 )
 
 box::use(
+  app/config[sheet_name_spr],
   app/logic/info[generate_info],
   app/logic/tracker[rename_sheet_cols]
 )
