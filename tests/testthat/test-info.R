@@ -66,7 +66,7 @@ describe("format_info_data()", {
     cols_rules <- cols_rules[cols_rules %in% before]
     cols_rules <- cols_rules[cols_rules != "tipe_dan_lt"]
 
-    expect_true(all((names(cols_rules) %in% after ) == TRUE))
+    expect_true(all((names(cols_rules) %in% after) == TRUE))
   })
 
   it("formats harga_tanah_bangunan formatted with format_rupiah function", {
