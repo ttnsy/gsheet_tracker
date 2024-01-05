@@ -1,3 +1,5 @@
+options(scipen = 99)
+
 box::use(
   glue[glue]
 )
