@@ -1,5 +1,3 @@
-options(scipen = 99)
-
 box::use(
   shiny[...],
   shinyFeedback[showToast],
@@ -12,10 +10,14 @@ box::use(
 )
 
 box::use(
-  app/config[sheet_name_spr],
-  app/logic/info[generate_info],
+  app/config[cols_spr, sheet_name_spr],
   app/logic/tracker[rename_sheet_cols],
-  app/logic/spr[reactable_spr]
+  app/logic/spr[
+    clean_spr_data,
+    generate_info_spr,
+    reactable_spr,
+    spr_to_append
+  ]
 )
 
 #' @export
@@ -33,22 +35,13 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id, sheet_id, spr_data, cols_rules) {
+server <- function(id, sheet_id, spr_data) {
   moduleServer(id, function(input, output, session) {
     ns  <- session$ns
 
-    spr_clean <- reactive({
-      req(spr_data())
-
-      spr_data() %>%
-        select(-c("blok_id"))  %>%
-        mutate(
-          bukti_booking_fee = as.character(
-          a("Gdrive Link", href = bukti_booking_fee, target = "_blank")
-        )
-      ) %>%
-      select(timestamp, status, everything()) %>%
-      rename_sheet_cols(cols_rules, revert=TRUE)
+    spr_clean <- eventReactive(spr_data(), {
+      data <- spr_data()
+      clean_spr_data(data)
     })
 
     spr_shared <- SharedData$new(spr_clean)
@@ -80,17 +73,7 @@ server <- function(id, sheet_id, spr_data, cols_rules) {
 
     observeEvent(col_state(), {
       dat <- to_edit()
-
-      info <- tagList(
-        generate_info(
-          "Nama",
-          dat$nama
-        ),
-        generate_info(
-          "Blok/No. Kavling",
-          glue("{dat$blok}/{dat$no_kavling}")
-        )
-      )
+      info <- generate_info_spr(dat)
 
       showModal(
         modalDialog(
@@ -119,14 +102,8 @@ server <- function(id, sheet_id, spr_data, cols_rules) {
 
     observeEvent(input$submit, {
       req(input$status)
-
-      dat <- to_edit() %>%
-        select(-blok_id) %>%
-        mutate(
-          timestamp = Sys.time(),
-          status = input$status
-        ) %>%
-      rename_sheet_cols(cols_rules, revert=TRUE)
+      dat <- to_edit()
+      dat <- spr_to_append(dat)
 
       sheet_append(sheet_id, dat, sheet = sheet_name_spr)
       removeModal()

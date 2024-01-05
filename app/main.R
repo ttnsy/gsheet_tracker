@@ -72,7 +72,7 @@ server <- function(id) {
         filter(status == "Process")
     })
 
-    spr$server("spr", sheet_id, spr_data, cols_rules = cols_spr)
+    spr$server("spr", sheet_id, spr_data)
     tracker$server("tracker", sheet_id, data = spr_data_process)
   })
 }
