@@ -1,13 +1,15 @@
 options(scipen = 99)
 
 box::use(
-  glue[glue]
+  dplyr[`%>%`],
+  glue[glue],
+  base64enc[base64decode],
+  googlesheets4[gs4_auth],
+  googledrive[drive_auth],
 )
 
 #' google sheet urls & creds
 google_sheet_url  <- Sys.getenv("GOOGLE_SHEET_URL")
-google_service_acc_token <- Sys.getenv("GOOGLE_SERVICE_ACCOUNT_TOKEN")
-google_service_acc_path <- glue(".secrets/{google_service_acc_token}")
 
 #' gsheet names & table to df colnames
 data_cols <- config::get(file = "data_cols.yml")

@@ -12,6 +12,7 @@ box::use(
 box::use(
   app/config[...],
   app/logic/main[read_spr_data],
+  app/logic/auth[auth_google],
   app/view/spr,
   app/view/tracker
 )
@@ -46,8 +47,7 @@ server <- function(id) {
   moduleServer(id, function(input, output, session) {
     router_server("/")
 
-    gs4_auth(path = google_service_acc_path)
-    drive_auth(path = google_service_acc_path)
+    auth_google()
     sheet_id  <- as_sheets_id(google_sheet_url)
 
     #' trigger to reload data from gsheet
