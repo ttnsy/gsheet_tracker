@@ -13,11 +13,7 @@ This app is a showcase of how Shiny can work with googlesheet to handle tracker 
 ### 🏃‍♀️ Running the apps locally
 1. **Restore dependencies:**
    This app is built using `rhino` which relies on `renv` for managing dependencies. Start by running `renv::restore()` to install all necessary packages.
-2. **Set up environment variable:**
-   You'll need to create a `.Renviron` file in your project directory. Add these variables to it:
-   - `GOOGLE_MAIL`: your google mail
-   - `GOOGLE_SHEET_URL`: Paste [this](https://docs.google.com/spreadsheets/d/1DTgvB2-tZpb37maYWc18sDQ2xQ_jGVlefYGCU08mvvc/edit?usp=sharing) googlesheet url.
-3. Run with `rhino::app()`
+2. Run with `rhino::app()`
 
 ### 🚜 Using the app 
 
