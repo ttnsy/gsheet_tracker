@@ -8,8 +8,6 @@ This app is a showcase of how Shiny can work with googlesheet to handle tracker 
 - Enables users to update the Google Sheet directly within the application.
 - Includes a feature that allows users to upload images to Google Drive and subsequently update the corresponding links in the Google Sheet.
 
-🐱 👉 https://tangerine.shinyapps.io/gsheet_tracker/ 👈 
-
 ### 🏃‍♀️ Running the apps locally
 1. **Restore dependencies:**
    This app is built using `rhino` which relies on `renv` for managing dependencies. Start by running `renv::restore()` to install all necessary packages.
